@@ -76,7 +76,7 @@ public class FinishLaunchHandlerImpl implements FinishLaunchHandler {
 	public FinishLaunchRS finishLaunch(String launchId, FinishExecutionRQ finishLaunchRQ, ReportPortalUser.ProjectDetails projectDetails,
 			ReportPortalUser user, String baseUrl) {
 		Launch launch = launchRepository.findByUuid(launchId).orElseThrow(() -> new ReportPortalException(LAUNCH_NOT_FOUND, launchId));
-
+		//realne pridanie atributov ak existuju
 		validateRoles(launch, user, projectDetails);
 		validate(launch, finishLaunchRQ);
 

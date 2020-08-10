@@ -26,6 +26,8 @@ import com.epam.ta.reportportal.entity.enums.TestItemTypeEnum;
 import com.epam.ta.reportportal.ws.model.FinishTestItemRQ;
 import com.epam.ta.reportportal.ws.model.StartTestItemRQ;
 import com.epam.ta.reportportal.ws.model.log.SaveLogRQ;
+import com.epam.ta.reportportal.ws.model.attribute.ItemAttributesRQ;
+import com.epam.ta.reportportal.ws.model.ParameterResource;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +47,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 
 import static com.epam.ta.reportportal.core.imprt.impl.DateUtils.toMillis;
 
@@ -77,6 +83,10 @@ public class XunitImportHandler extends DefaultHandler {
 	private String currentItemUuid;
 
 	private LocalDateTime startSuiteTime;
+
+	private Set<ItemAttributesRQ> attributes = new HashSet<ItemAttributesRQ>();
+	private Set<ItemAttributesRQ> itemAttributes = new HashSet<ItemAttributesRQ>();
+	private List<ParameterResource> parameters = new ArrayList<ParameterResource>();
 
 	private long commonDuration;
 	private long currentDuration;
@@ -124,6 +134,26 @@ public class XunitImportHandler extends DefaultHandler {
 				message = new StringBuilder();
 				status = StatusEnum.SKIPPED;
 				break;
+			case DISTRO:
+				ItemAttributesRQ attr = new ItemAttributesRQ("distro", attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				this.attributes.add(attr);
+				break;
+			case PARAMETERS:
+				this.parameters.clear();
+				break;
+			case PARAMETER:
+				ParameterResource par = new ParameterResource();
+				//TODO treba upravit pre standard ktory neni este zavedeny
+				par.setKey(attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				this.parameters.add(par);
+				break;
+			case PROPERTIES:
+				this.itemAttributes.clear();
+				break;		
+			case PROPERTY:
+				ItemAttributesRQ itemAttr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				this.itemAttributes.add(itemAttr);
+				break;
 			case SYSTEM_OUT:
 			case SYSTEM_ERR:
 			case WARNING:
@@ -141,6 +171,8 @@ public class XunitImportHandler extends DefaultHandler {
 		switch (XunitReportTag.fromString(qName)) {
 			case TESTSUITE:
 				finishRootItem();
+				this.itemAttributes.clear();
+				this.parameters.clear();
 				break;
 			case TESTCASE:
 				finishTestItem();
@@ -217,6 +249,8 @@ public class XunitImportHandler extends DefaultHandler {
 		rq.setStartTime(EntityUtils.TO_DATE.apply(startItemTime));
 		rq.setType(TestItemTypeEnum.STEP.name());
 		rq.setName(name);
+		rq.setParameters(this.parameters);
+		rq.setAttributes(this.attributes);
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
 		currentDuration = toMillis(duration);
 		currentItemUuid = id;
@@ -226,6 +260,8 @@ public class XunitImportHandler extends DefaultHandler {
 	private void finishRootItem() {
 		FinishTestItemRQ rq = new FinishTestItemRQ();
 		rq.setEndTime(EntityUtils.TO_DATE.apply(startItemTime));
+		this.itemAttributes.addAll(this.attributes);
+		rq.setAttributes(this.itemAttributes);
 		finishTestItemHandler.finishTestItem(user, projectDetails, itemUuids.poll(), rq);
 		status = null;
 	}
@@ -274,5 +310,9 @@ public class XunitImportHandler extends DefaultHandler {
 
 	long getCommonDuration() {
 		return commonDuration;
+	}
+
+	public Set<ItemAttributesRQ> getAttributes() {
+		return this.attributes;
 	}
 }

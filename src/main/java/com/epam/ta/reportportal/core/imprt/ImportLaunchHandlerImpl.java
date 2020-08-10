@@ -53,7 +53,7 @@ public class ImportLaunchHandlerImpl implements ImportLaunchHandler {
 	@Override
 	public OperationCompletionRS importLaunch(ReportPortalUser.ProjectDetails projectDetails, ReportPortalUser user, String format,
 			MultipartFile file, String baseUrl) {
-
+				//tu to cele zacina
 		validate(file);
 
 		ImportType type = ImportType.fromValue(format)

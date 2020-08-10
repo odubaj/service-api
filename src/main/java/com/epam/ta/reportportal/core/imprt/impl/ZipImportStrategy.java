@@ -61,6 +61,7 @@ public class ZipImportStrategy extends AbstractImportStrategy {
 
 	private String processZipFile(File zip, ReportPortalUser.ProjectDetails projectDetails, ReportPortalUser user, String baseUrl) {
 		//copy of the launch's id to use it in catch block if something goes wrong
+		//spracovanie
 		String savedLaunchId = null;
 		try (ZipFile zipFile = new ZipFile(zip)) {
 			String launchId = startLaunch(projectDetails, user, zip.getName().substring(0, zip.getName().indexOf("." + ZIP_EXTENSION)));
@@ -70,6 +71,7 @@ public class ZipImportStrategy extends AbstractImportStrategy {
 						.withParameters(projectDetails, launchId, user, getEntryStream(zipFile, zipEntry));
 				return CompletableFuture.supplyAsync(job::call, service);
 			}).toArray(CompletableFuture[]::new);
+			//overit ci vo future su uz atributy
 			ParseResults parseResults = processResults(futures);
 			finishLaunch(launchId, projectDetails, user, parseResults, baseUrl);
 			return launchId;

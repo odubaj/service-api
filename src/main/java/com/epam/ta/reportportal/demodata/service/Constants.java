@@ -25,7 +25,7 @@ class Constants {
 		//static only
 	}
 
-	static final String NAME = "Demo Api Tests";
+	static final String NAME = "Demo Api Tests Ondrej Tests";
 	static final String PACKAGE = "com.epam.ta.reportportal.demodata.";
 	static final String ITEM_WITH_NESTED_STEPS_NAME = "Test with nested steps";
 	static final int STORY_PROBABILITY = 30;

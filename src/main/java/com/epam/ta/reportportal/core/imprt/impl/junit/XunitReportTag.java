@@ -24,6 +24,12 @@ public enum XunitReportTag {
 	// the testsuite element
 	TESTSUITE("testsuite"),
 
+	// the parameters element
+	PARAMETERS("parameters"),
+
+	// the parameter element
+	PARAMETER("parameter"),
+
 	// the testcase element
 	TESTCASE("testcase"),
 
@@ -61,6 +67,9 @@ public enum XunitReportTag {
 
 	// the property element
 	PROPERTY("property"),
+
+	// the distro element
+	DISTRO("distro"),
 
 	// value attribute for property elements
 	ATTR_VALUE("value"),

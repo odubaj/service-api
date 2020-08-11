@@ -68,8 +68,11 @@ public enum XunitReportTag {
 	// the property element
 	PROPERTY("property"),
 
-	// the distro element
-	DISTRO("distro"),
+	// the global_properties element
+	GLOBAL_PROPERTIES("global_properties"),
+
+	// the global_property element
+	GLOBAL_PROPERTY("global_property"),
 
 	// value attribute for property elements
 	ATTR_VALUE("value"),

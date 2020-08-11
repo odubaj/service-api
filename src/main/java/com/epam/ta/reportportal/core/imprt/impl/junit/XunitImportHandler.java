@@ -134,8 +134,8 @@ public class XunitImportHandler extends DefaultHandler {
 				message = new StringBuilder();
 				status = StatusEnum.SKIPPED;
 				break;
-			case DISTRO:
-				ItemAttributesRQ attr = new ItemAttributesRQ("distro", attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+			case GLOBAL_PROPERTY:
+				ItemAttributesRQ attr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
 				this.attributes.add(attr);
 				break;
 			case PARAMETERS:

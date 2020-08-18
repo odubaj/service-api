@@ -74,6 +74,12 @@ public enum XunitReportTag {
 	// the global_property element
 	GLOBAL_PROPERTY("global_property"),
 
+	// the logs element
+	LOGS("logs"),
+
+	// the log element
+	LOG("log"),
+
 	// value attribute for property elements
 	ATTR_VALUE("value"),
 

@@ -51,6 +51,8 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.net.URL;
 
 import static com.epam.ta.reportportal.core.imprt.impl.DateUtils.toMillis;
 
@@ -120,6 +122,9 @@ public class XunitImportHandler extends DefaultHandler {
 					startTestItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()));
 				}
 				break;
+			case LOGS:
+				this.parameters.clear();
+				break;	
 			case TESTCASE:
 				startStepItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
 						attributes.getValue(XunitReportTag.ATTR_TIME.getValue())
@@ -139,12 +144,20 @@ public class XunitImportHandler extends DefaultHandler {
 				this.attributes.add(attr);
 				break;
 			case PARAMETERS:
-				this.parameters.clear();
+				//this.parameters.clear();
 				break;
 			case PARAMETER:
-				ParameterResource par = new ParameterResource();
+				//ParameterResource par = new ParameterResource();
 				//TODO treba upravit pre standard ktory neni este zavedeny
-				par.setKey(attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				//par.setKey(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()));
+				//par.setValue(attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				//par.setKey(attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				//this.parameters.add(par);
+				break;
+			case LOG:
+				ParameterResource par = new ParameterResource();
+				par.setKey(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()));
+				par.setValue(attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
 				this.parameters.add(par);
 				break;
 			case PROPERTIES:
@@ -172,10 +185,12 @@ public class XunitImportHandler extends DefaultHandler {
 			case TESTSUITE:
 				finishRootItem();
 				this.itemAttributes.clear();
-				this.parameters.clear();
+				//this.parameters.clear();
 				break;
+			//case LOGS:
 			case TESTCASE:
 				finishTestItem();
+				//this.parameters.clear();
 				break;
 			case SKIPPED:
 			case ERROR:
@@ -249,7 +264,10 @@ public class XunitImportHandler extends DefaultHandler {
 		rq.setStartTime(EntityUtils.TO_DATE.apply(startItemTime));
 		rq.setType(TestItemTypeEnum.STEP.name());
 		rq.setName(name);
-		rq.setParameters(this.parameters);
+		if(name.equals(new String("LOGS"))) {
+			rq.setParameters(this.parameters);
+			//this.parameters.clear();
+		}
 		rq.setAttributes(this.attributes);
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
 		currentDuration = toMillis(duration);
@@ -282,6 +300,12 @@ public class XunitImportHandler extends DefaultHandler {
 			SaveLogRQ saveLogRQ = new SaveLogRQ();
 			saveLogRQ.setLevel(logLevel.name());
 			saveLogRQ.setLogTime(EntityUtils.TO_DATE.apply(startItemTime));
+			/*String out = "";
+			try {
+				out = new Scanner(new URL(message.toString()).openStream(), "UTF-8").useDelimiter("\\A").next();
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+			}*/
 			saveLogRQ.setMessage(message.toString().trim());
 			saveLogRQ.setItemUuid(currentItemUuid);
 			createLogHandler.createLog(saveLogRQ, null, projectDetails);

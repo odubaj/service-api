@@ -127,7 +127,7 @@ public class XunitImportHandler extends DefaultHandler {
 				break;	
 			case TESTCASE:
 				startStepItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
-						attributes.getValue(XunitReportTag.ATTR_TIME.getValue())
+						attributes.getValue(XunitReportTag.ATTR_TIME.getValue()), false
 				);
 				break;
 			case ERROR:
@@ -187,7 +187,10 @@ public class XunitImportHandler extends DefaultHandler {
 				this.itemAttributes.clear();
 				//this.parameters.clear();
 				break;
-			//case LOGS:
+			case LOGS:
+				startStepItem(new String("LOGS"), new String("1"), true);
+				finishTestItem();
+				break;
 			case TESTCASE:
 				finishTestItem();
 				//this.parameters.clear();
@@ -258,13 +261,13 @@ public class XunitImportHandler extends DefaultHandler {
 		itemUuids.push(id);
 	}
 
-	private void startStepItem(String name, String duration) {
+	private void startStepItem(String name, String duration, boolean logsEnabled) {
 		StartTestItemRQ rq = new StartTestItemRQ();
 		rq.setLaunchUuid(launchUuid);
 		rq.setStartTime(EntityUtils.TO_DATE.apply(startItemTime));
 		rq.setType(TestItemTypeEnum.STEP.name());
 		rq.setName(name);
-		if(name.equals(new String("LOGS"))) {
+		if(logsEnabled) {
 			rq.setParameters(this.parameters);
 			//this.parameters.clear();
 		}

@@ -16,7 +16,6 @@
 
 package com.epam.ta.reportportal.core.project.impl;
 
-import com.epam.reportportal.extension.event.ProjectEvent;
 import com.epam.ta.reportportal.auth.acl.ShareableObjectsHandler;
 import com.epam.ta.reportportal.commons.Preconditions;
 import com.epam.ta.reportportal.commons.ReportPortalUser;
@@ -155,7 +154,7 @@ public class UpdateProjectHandlerImpl implements UpdateProjectHandler {
 		projectRepository.save(project);
 		ProjectAttributesActivityResource after = TO_ACTIVITY_RESOURCE.apply(project);
 
-		applicationEventPublisher.publishEvent(new ProjectEvent(project.getId(), UPDATE_EVENT));
+//		applicationEventPublisher.publishEvent(new ProjectEvent(project.getId(), UPDATE_EVENT));
 		messageBus.publishActivity(new ProjectUpdatedEvent(before, after, user.getUserId(), user.getUsername()));
 		messageBus.publishActivity(new ProjectAnalyzerConfigEvent(before, after, user.getUserId(), user.getUsername()));
 

@@ -88,6 +88,7 @@ public class XunitImportHandler extends DefaultHandler {
 
 	private Set<ItemAttributesRQ> attributes = new HashSet<ItemAttributesRQ>();
 	private Set<ItemAttributesRQ> itemAttributes = new HashSet<ItemAttributesRQ>();
+	private Set<ItemAttributesRQ> archAttributes = new HashSet<ItemAttributesRQ>();
 	private List<ParameterResource> parameters = new ArrayList<ParameterResource>();
 
 	private long commonDuration;
@@ -113,6 +114,7 @@ public class XunitImportHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) {
 		switch (XunitReportTag.fromString(qName)) {
+			case TESTSUITE_ARCH:
 			case TESTSUITE:
 				if (itemUuids.isEmpty()) {
 					startRootItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
@@ -162,10 +164,17 @@ public class XunitImportHandler extends DefaultHandler {
 				break;
 			case PROPERTIES:
 				this.itemAttributes.clear();
+				break;
+			case ARCH_PROPERTIES:
+				this.archAttributes.clear();
 				break;		
 			case PROPERTY:
 				ItemAttributesRQ itemAttr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
 				this.itemAttributes.add(itemAttr);
+				break;
+			case ARCH_PROPERTY:
+				ItemAttributesRQ archAttr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				this.archAttributes.add(archAttr);
 				break;
 			case SYSTEM_OUT:
 			case SYSTEM_ERR:
@@ -183,8 +192,13 @@ public class XunitImportHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) {
 		switch (XunitReportTag.fromString(qName)) {
 			case TESTSUITE:
-				finishRootItem();
+				finishRootItem(false);
 				this.itemAttributes.clear();
+				//this.parameters.clear();
+				break;
+			case TESTSUITE_ARCH:
+				finishRootItem(true);
+				this.archAttributes.clear();
 				//this.parameters.clear();
 				break;
 			case LOGS:
@@ -278,11 +292,16 @@ public class XunitImportHandler extends DefaultHandler {
 		itemUuids.push(id);
 	}
 
-	private void finishRootItem() {
+	private void finishRootItem(boolean arch) {
 		FinishTestItemRQ rq = new FinishTestItemRQ();
 		rq.setEndTime(EntityUtils.TO_DATE.apply(startItemTime));
-		this.itemAttributes.addAll(this.attributes);
-		rq.setAttributes(this.itemAttributes);
+		if(arch == true) {
+			this.archAttributes.addAll(this.attributes);
+			rq.setAttributes(this.archAttributes);
+		} else {
+			this.itemAttributes.addAll(this.attributes);
+			rq.setAttributes(this.itemAttributes);
+		}
 		finishTestItemHandler.finishTestItem(user, projectDetails, itemUuids.poll(), rq);
 		status = null;
 	}

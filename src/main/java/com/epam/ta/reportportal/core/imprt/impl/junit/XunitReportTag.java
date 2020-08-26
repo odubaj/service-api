@@ -24,6 +24,9 @@ public enum XunitReportTag {
 	// the testsuite element
 	TESTSUITE("testsuite"),
 
+	// the testsuite-arch element
+	TESTSUITE_ARCH("testsuite-arch"),
+
 	// the parameters element
 	PARAMETERS("parameters"),
 
@@ -73,6 +76,12 @@ public enum XunitReportTag {
 
 	// the global_property element
 	GLOBAL_PROPERTY("global_property"),
+
+	// the arch_properties element
+	ARCH_PROPERTIES("arch-properties"),
+
+	// the arch_property element
+	ARCH_PROPERTY("arch-property"),
 
 	// the logs element
 	LOGS("logs"),

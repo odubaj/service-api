@@ -21,7 +21,6 @@ import com.epam.ta.reportportal.commons.querygen.Queryable;
 import com.epam.ta.reportportal.core.item.TestItemService;
 import com.epam.ta.reportportal.core.item.impl.LaunchAccessValidator;
 import com.epam.ta.reportportal.core.item.impl.history.param.HistoryRequestParams;
-import com.epam.ta.reportportal.core.item.impl.history.provider.HistoryProvider;
 import com.epam.ta.reportportal.dao.TestItemRepository;
 import com.epam.ta.reportportal.entity.item.TestItem;
 import com.epam.ta.reportportal.entity.item.history.TestItemHistory;
@@ -39,18 +38,17 @@ import org.springframework.stereotype.Service;
  * @author <a href="mailto:ivan_budayeu@epam.com">Ivan Budayeu</a>
  */
 @Service
-public class TestItemBaselineHistoryProvider implements HistoryProvider {
+public class TestItemBaselineHistoryProvider extends AbstractHistoryProvider {
 
 	private final TestItemService testItemService;
 	private final LaunchAccessValidator launchAccessValidator;
-	private final TestItemRepository testItemRepository;
 
 	@Autowired
 	public TestItemBaselineHistoryProvider(TestItemService testItemService, LaunchAccessValidator launchAccessValidator,
 			TestItemRepository testItemRepository) {
+		super(testItemRepository);
 		this.testItemService = testItemService;
 		this.launchAccessValidator = launchAccessValidator;
-		this.testItemRepository = testItemRepository;
 	}
 
 	@Override
@@ -73,14 +71,14 @@ public class TestItemBaselineHistoryProvider implements HistoryProvider {
 
 		return historyRequestParams.getHistoryType()
 				.filter(HistoryRequestParams.HistoryTypeEnum.LINE::equals)
-				.map(type -> testItemRepository.loadItemsHistoryPage(filter,
+				.map(type -> getHistoryLine(filter,
 						pageable,
 						projectDetails.getProjectId(),
 						launch.getName(),
 						historyRequestParams.getHistoryDepth(),
 						usingHash
 				))
-				.orElseGet(() -> testItemRepository.loadItemsHistoryPage(filter,
+				.orElseGet(() -> getHistoryTable(filter,
 						pageable,
 						projectDetails.getProjectId(),
 						historyRequestParams.getHistoryDepth(),

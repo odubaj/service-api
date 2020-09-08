@@ -20,7 +20,7 @@ node {
         sh './gradlew build'
     }
     stage('Docker image') {
-        sh "./gradlew buildDocker -P dockerServerUrl=$DOCKER_HOST"
+        sh "./gradlew buildDocker -x test -P dockerServerUrl=$DOCKER_HOST"
     }
     stage('Deploy Container') {
         docker.withServer("$DOCKER_HOST") {

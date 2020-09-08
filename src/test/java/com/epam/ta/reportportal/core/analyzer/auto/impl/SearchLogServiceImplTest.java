@@ -115,7 +115,7 @@ class SearchLogServiceImplTest {
 		when(userFilter.getTargetClass()).thenReturn(ObjectType.Launch);
 		when(userFilter.getFilterCondition()).thenReturn(Collections.emptySet());
 
-		when(logRepository.findMessagesByItemIdAndLevelGte(testItem.getItemId(), LogLevel.ERROR_INT)).thenReturn(Lists.newArrayList(
+		when(logRepository.findMessagesByLaunchIdAndItemIdAndPathAndLevelGte(testItem.getLaunchId(), testItem.getItemId(), testItem.getPath(), LogLevel.ERROR_INT)).thenReturn(Lists.newArrayList(
 				"message"));
 		SearchRs searchRs = new SearchRs();
 		searchRs.setLogId(1L);

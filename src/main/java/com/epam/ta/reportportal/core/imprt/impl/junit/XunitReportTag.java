@@ -59,6 +59,8 @@ public enum XunitReportTag {
 
 	SKIPPED("skipped"),
 
+	MANUAL_TEST("manual-test"),
+
 	// type attribute for failure and error elements
 	ATTR_TYPE("type"),
 

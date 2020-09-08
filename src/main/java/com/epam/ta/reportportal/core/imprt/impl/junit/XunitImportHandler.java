@@ -141,6 +141,10 @@ public class XunitImportHandler extends DefaultHandler {
 				message = new StringBuilder();
 				status = StatusEnum.SKIPPED;
 				break;
+			case MANUAL_TEST:
+				message = new StringBuilder();
+				status = StatusEnum.MANUAL;
+				break;
 			case GLOBAL_PROPERTY:
 				ItemAttributesRQ attr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
 				this.attributes.add(attr);
@@ -212,6 +216,7 @@ public class XunitImportHandler extends DefaultHandler {
 			case SKIPPED:
 			case ERROR:
 			case FAILURE:
+			case MANUAL_TEST:
 			case SYSTEM_ERR:
 				attachLog(LogLevel.ERROR);
 				break;

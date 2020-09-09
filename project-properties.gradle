@@ -2,7 +2,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 def commonScriptsUrl = 'https://raw.githubusercontent.com/reportportal/gradle-scripts/'
-def migrationsScriptsUrl = 'https://raw.githubusercontent.com/reportportal/migrations/'
+def migrationsScriptsUrl = 'https://raw.githubusercontent.com/odubaj/migrations/'
 
 project.ext {
     limits = [

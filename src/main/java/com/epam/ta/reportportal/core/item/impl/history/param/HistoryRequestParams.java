@@ -38,6 +38,23 @@ public class HistoryRequestParams {
 	private Long launchId;
 	private HistoryTypeEnum historyType;
 	private FilterParams filterParams;
+	/*private String launchKeyAttribute;
+	private String launchValueAttribute;
+
+	private HistoryRequestParams(int historyDepth, Long parentId, Long itemId, Long launchId, String historyType, Long filterId,
+			int launchesLimit, boolean isLatest, String launchKeyAttribute, String launchValueAttribute) {
+		this.historyDepth = historyDepth;
+		this.parentId = parentId;
+		this.itemId = itemId;
+		this.launchId = launchId;
+		ofNullable(historyType).ifPresent(type -> this.historyType = HistoryTypeEnum.fromValue(historyType)
+				.orElseThrow(() -> new ReportPortalException(ErrorType.BAD_REQUEST_ERROR,
+						Suppliers.formattedSupplier("Wrong history type - '{}'", historyType).get()
+				)));
+		ofNullable(launchKeyAttribute).ifPresent(launchKeyAttribute -> this.launchKeyAttribute = launchKeyAttribute);
+		ofNullable(launchValueAttribute).ifPresent(launchValueAttribute -> this.launchValueAttribute = launchValueAttribute);
+		ofNullable(filterId).ifPresent(id -> this.filterParams = FilterParams.of(filterId, launchesLimit, isLatest));
+	}*/
 
 	private HistoryRequestParams(int historyDepth, Long parentId, Long itemId, Long launchId, String historyType, Long filterId,
 			int launchesLimit, boolean isLatest) {
@@ -117,6 +134,14 @@ public class HistoryRequestParams {
 	public Optional<HistoryTypeEnum> getHistoryType() {
 		return ofNullable(historyType);
 	}
+
+	/*public Optional<String> getLaunchAttributeKey() {
+		return ofNullable(launchKeyAttribute);
+	}
+
+	public Optional<String> getLaunchAttributeValue() {
+		return ofNullable(launchValueAttribute);
+	}*/
 
 	public static HistoryRequestParams of(int historyDepth, Long parentId, Long itemId, Long launchId, String historyType, Long filterId,
 			int launchesLimit, boolean isLatest) {

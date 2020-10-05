@@ -77,6 +77,8 @@ public class TestItemController {
 	private static final String HISTORY_DEPTH_PARAM = "historyDepth";
 	private static final String HISTORY_DEPTH_DEFAULT_VALUE = "5";
 	private static final String LAUNCHES_LIMIT_DEFAULT_VALUE = "0";
+	private static final String LAUNCHES_KEY_FILTER = "attributeLaunchKey";
+	private static final String LAUNCHES_VALUE_FILTER = "attributeLaunchValue";
 
 	private final StartTestItemHandler startTestItemHandler;
 	private final DeleteTestItemHandler deleteTestItemHandler;
@@ -161,6 +163,7 @@ public class TestItemController {
 			@RequestParam(value = LAUNCHES_LIMIT_REQUEST_PARAM, defaultValue = "0", required = false) int launchesLimit,
 			@FilterFor(TestItem.class) Filter filter, @FilterFor(TestItem.class) Queryable predefinedFilter,
 			@SortFor(TestItem.class) Pageable pageable) {
+		
 		return getTestItemHandler.getTestItems(new CompositeFilter(Operator.AND, filter, predefinedFilter),
 				pageable,
 				extractProjectDetails(user, projectName),
@@ -227,13 +230,16 @@ public class TestItemController {
 			@Nullable @RequestParam(value = FILTER_ID_REQUEST_PARAM, required = false) Long filterId,
 			@RequestParam(value = IS_LATEST_LAUNCHES_REQUEST_PARAM, defaultValue = "false", required = false) boolean isLatest,
 			@RequestParam(value = LAUNCHES_LIMIT_REQUEST_PARAM, defaultValue = "0", required = false) int launchesLimit,
+			@RequestParam(value = LAUNCHES_KEY_FILTER, defaultValue = "", required = false) String launchKeyAttribute,
+			@RequestParam(value = LAUNCHES_VALUE_FILTER, defaultValue = "", required = false) String launchValueAttribute,
 			@RequestParam(value = HISTORY_DEPTH_PARAM, required = false, defaultValue = HISTORY_DEPTH_DEFAULT_VALUE) int historyDepth) {
 
+		System.out.println("toto hladas!!!!!!!"+filter.toString()+"tu to konci!!!!!");
 		return testItemsHistoryHandler.getItemsHistory(extractProjectDetails(user, projectName),
 				new CompositeFilter(Operator.AND, filter, predefinedFilter),
 				pageable,
 				HistoryRequestParams.of(historyDepth, parentId, itemId, launchId, type, filterId, launchesLimit, isLatest),
-				user
+				user, launchKeyAttribute, launchValueAttribute
 		);
 	}
 

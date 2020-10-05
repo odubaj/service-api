@@ -37,9 +37,12 @@ public interface TestItemsHistoryHandler {
 	 * @param pageable             - paging parameters object
 	 * @param historyRequestParams - {@link HistoryRequestParams}
 	 * @param user                 - {@link ReportPortalUser}
+	 * @param launchKeyAttribute   - {launch key attribute}
+	 * @param launchValueAttribute - {launch value attribute}
 	 * @return {@link Iterable} of {@link TestItemHistoryElement}
 	 */
 	Iterable<TestItemHistoryElement> getItemsHistory(ReportPortalUser.ProjectDetails projectDetails, Queryable filter, Pageable pageable,
-			HistoryRequestParams historyRequestParams, ReportPortalUser user);
+			HistoryRequestParams historyRequestParams, ReportPortalUser user, 
+			String launchKeyAttribute, String launchValueAttribute);
 
 }

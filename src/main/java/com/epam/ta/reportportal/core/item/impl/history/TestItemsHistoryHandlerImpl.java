@@ -21,14 +21,18 @@ import com.epam.ta.reportportal.commons.querygen.CompositeFilter;
 import com.epam.ta.reportportal.commons.querygen.Filter;
 import com.epam.ta.reportportal.commons.querygen.FilterCondition;
 import com.epam.ta.reportportal.commons.querygen.Queryable;
+import com.epam.ta.reportportal.commons.querygen.FilterTarget;
 import com.epam.ta.reportportal.commons.validation.BusinessRule;
 import com.epam.ta.reportportal.commons.validation.Suppliers;
 import com.epam.ta.reportportal.core.item.history.TestItemsHistoryHandler;
 import com.epam.ta.reportportal.core.item.impl.history.param.HistoryRequestParams;
 import com.epam.ta.reportportal.core.item.impl.history.provider.HistoryProviderFactory;
 import com.epam.ta.reportportal.dao.TestItemRepository;
+import com.epam.ta.reportportal.dao.LaunchRepository;
 import com.epam.ta.reportportal.entity.enums.LaunchModeEnum;
 import com.epam.ta.reportportal.entity.item.TestItem;
+import com.epam.ta.reportportal.entity.launch.Launch;
+import com.epam.ta.reportportal.entity.ItemAttribute;
 import com.epam.ta.reportportal.entity.item.history.TestItemHistory;
 import com.epam.ta.reportportal.entity.user.UserRole;
 import com.epam.ta.reportportal.exception.ReportPortalException;
@@ -49,6 +53,9 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.stream.*;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -78,24 +85,34 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 	private boolean oldHistory;
 
 	private final TestItemRepository testItemRepository;
+	private final LaunchRepository launchRepository;
 	private final HistoryProviderFactory historyProviderFactory;
 	private final List<ResourceUpdaterProvider<TestItemUpdaterContent, TestItemResource>> resourceUpdaterProviders;
 
 	@Autowired
-	public TestItemsHistoryHandlerImpl(TestItemRepository testItemRepository, HistoryProviderFactory historyProviderFactory,
+	public TestItemsHistoryHandlerImpl(TestItemRepository testItemRepository, LaunchRepository launchRepository, HistoryProviderFactory historyProviderFactory,
 			List<ResourceUpdaterProvider<TestItemUpdaterContent, TestItemResource>> resourceUpdaterProviders) {
 		this.testItemRepository = testItemRepository;
 		this.historyProviderFactory = historyProviderFactory;
 		this.resourceUpdaterProviders = resourceUpdaterProviders;
+		this.launchRepository = launchRepository;
 	}
 
 	@Override
 	public Iterable<TestItemHistoryElement> getItemsHistory(ReportPortalUser.ProjectDetails projectDetails, Queryable filter,
-			Pageable pageable, HistoryRequestParams historyRequestParams, ReportPortalUser user) {
+			Pageable pageable, HistoryRequestParams historyRequestParams, ReportPortalUser user, 
+			String launchKeyAttribute, String launchValueAttribute) {
+
+		Long myProjectId = projectDetails.getProjectId();
 
 		validateHistoryDepth(historyRequestParams.getHistoryDepth());
 
 		validateProjectRole(projectDetails, user);
+
+		//z filtru musim vymazat launch attributes + ich ziskat - je to jedina moznost
+		//pretoze history sa najskor prefiltruje z item filtru a nasledne sa uz nic nefiltruje
+		//iba sa ziskavaju historicke data bez filtru -> zbytocne tam sa snazit nieco rvat
+		//proste to spravit na prasaka a prefiltrovat si ich tu a bude to pekne fungovat
 
 		CompositeFilter itemHistoryFilter = new CompositeFilter(Operator.AND,
 				filter,
@@ -120,7 +137,7 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 						testItemResource -> String.valueOf(testItemResource.getTestCaseHash()),
 				testItemHistoryPage,
 				projectDetails.getProjectId(),
-				pageable
+				pageable, launchKeyAttribute, launchValueAttribute
 		);
 
 	}
@@ -135,6 +152,40 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 		BusinessRule.expect(historyDepth, greaterThan.and(lessThan)).verify(UNABLE_LOAD_TEST_ITEM_HISTORY, historyDepthMessage);
 	}
 
+	private List<TestItem> getItemsWithLaunchAttributes(Iterable<Long> childIds, String key, String value) {
+		List<TestItem> results = new ArrayList<TestItem>();
+
+		for (Long id : childIds) {
+			Optional<TestItem> item_optional = testItemRepository.findById(id);
+			if(item_optional.isPresent()) {
+				TestItem item = item_optional.get();
+				Optional<Launch> launch_optional = launchRepository.findById(item.getLaunchId());
+				Launch launch = launch_optional.get();
+				Set<ItemAttribute> attributes = launch.getAttributes();
+				for (ItemAttribute attribute : attributes) {
+					if ((key.isEmpty()) && (!value.isEmpty())) {
+						if((attribute.getValue()).equals(value)) {
+							results.add(item);
+							break;
+						}
+					} else if ((!key.isEmpty()) && (value.isEmpty())) {
+						if((attribute.getKey()).equals(key)) {
+							results.add(item);
+							break;
+						}
+					} else {
+						if(((attribute.getKey()).equals(key)) && ((attribute.getValue()).equals(value))) {
+							results.add(item);
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		return results;
+	}
+
 	private void validateProjectRole(ReportPortalUser.ProjectDetails projectDetails, ReportPortalUser user) {
 		if (user.getUserRole() != UserRole.ADMINISTRATOR) {
 			expect(projectDetails.getProjectRole() == OPERATOR, Predicate.isEqual(false)).verify(ACCESS_DENIED);
@@ -142,12 +193,27 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 	}
 
 	private Iterable<TestItemHistoryElement> buildHistoryElements(Function<TestItemResource, String> groupingFunction,
-			Page<TestItemHistory> testItemHistoryPage, Long projectId, Pageable pageable) {
-
-		List<TestItem> testItems = testItemRepository.findAllById(testItemHistoryPage.getContent()
+			Page<TestItemHistory> testItemHistoryPage, Long projectId, Pageable pageable, 
+			String launchKeyAttribute, String launchValueAttribute) {
+		
+		Stream<Long> stream = testItemHistoryPage.getContent()
 				.stream()
-				.flatMap(history -> history.getItemIds().stream())
-				.collect(toList()));
+				.flatMap(history -> history.getItemIds().stream());
+		List<Long> list1 = stream.collect(toList());
+		List<TestItem> testItems;
+		if((launchKeyAttribute.isEmpty()) && (launchValueAttribute.isEmpty())) {
+			testItems = testItemRepository.findAllById(list1);
+		} else {
+			testItems = getItemsWithLaunchAttributes(list1, launchKeyAttribute, launchValueAttribute);
+		}
+
+
+
+
+
+
+
+
 
 		List<ResourceUpdater<TestItemResource>> resourceUpdaters = getResourceUpdaters(projectId, testItems);
 

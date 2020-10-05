@@ -103,8 +103,6 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 			Pageable pageable, HistoryRequestParams historyRequestParams, ReportPortalUser user, 
 			String launchKeyAttribute, String launchValueAttribute) {
 
-		Long myProjectId = projectDetails.getProjectId();
-
 		validateHistoryDepth(historyRequestParams.getHistoryDepth());
 
 		validateProjectRole(projectDetails, user);
@@ -201,12 +199,12 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 				.flatMap(history -> history.getItemIds().stream());
 		List<Long> list1 = stream.collect(toList());
 		List<TestItem> testItems;
-		if((launchKeyAttribute.isEmpty()) && (launchValueAttribute.isEmpty())) {
+		/*if((launchKeyAttribute.isEmpty()) && (launchValueAttribute.isEmpty())) {
 			testItems = testItemRepository.findAllById(list1);
 		} else {
 			testItems = getItemsWithLaunchAttributes(list1, launchKeyAttribute, launchValueAttribute);
-		}
-
+		}*/
+		testItems = testItemRepository.findAllById(list1);
 
 
 

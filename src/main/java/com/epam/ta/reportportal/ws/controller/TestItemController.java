@@ -238,7 +238,8 @@ public class TestItemController {
 		return testItemsHistoryHandler.getItemsHistory(extractProjectDetails(user, projectName),
 				new CompositeFilter(Operator.AND, filter, predefinedFilter),
 				pageable,
-				HistoryRequestParams.of(historyDepth, parentId, itemId, launchId, type, filterId, launchesLimit, isLatest),
+				HistoryRequestParams.of(historyDepth, parentId, itemId, launchId, type, filterId, launchesLimit, isLatest, 
+				launchKeyAttribute, launchValueAttribute),
 				user, launchKeyAttribute, launchValueAttribute
 		);
 	}

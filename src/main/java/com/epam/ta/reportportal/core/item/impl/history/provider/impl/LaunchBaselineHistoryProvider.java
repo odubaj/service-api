@@ -65,12 +65,16 @@ public class LaunchBaselineHistoryProvider implements HistoryProvider {
 							projectDetails.getProjectId(),
 							launch.getName(),
 							historyRequestParams.getHistoryDepth(),
+							historyRequestParams.getLaunchAttributeKey(),
+							historyRequestParams.getLaunchAttributeValue(),
 							usingHash
 					))
 					.orElseGet(() -> testItemRepository.loadItemsHistoryPage(filter,
 							pageable,
 							projectDetails.getProjectId(),
 							historyRequestParams.getHistoryDepth(),
+							historyRequestParams.getLaunchAttributeKey(),
+							historyRequestParams.getLaunchAttributeValue(),
 							usingHash
 					));
 		}).orElseGet(() -> Page.empty(pageable));

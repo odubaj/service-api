@@ -38,7 +38,7 @@ public class HistoryRequestParams {
 	private Long launchId;
 	private HistoryTypeEnum historyType;
 	private FilterParams filterParams;
-	/*private String launchKeyAttribute;
+	private String launchKeyAttribute;
 	private String launchValueAttribute;
 
 	private HistoryRequestParams(int historyDepth, Long parentId, Long itemId, Long launchId, String historyType, Long filterId,
@@ -51,10 +51,10 @@ public class HistoryRequestParams {
 				.orElseThrow(() -> new ReportPortalException(ErrorType.BAD_REQUEST_ERROR,
 						Suppliers.formattedSupplier("Wrong history type - '{}'", historyType).get()
 				)));
-		ofNullable(launchKeyAttribute).ifPresent(launchKeyAttribute -> this.launchKeyAttribute = launchKeyAttribute);
-		ofNullable(launchValueAttribute).ifPresent(launchValueAttribute -> this.launchValueAttribute = launchValueAttribute);
+		ofNullable(launchKeyAttribute).ifPresent(key-> this.launchKeyAttribute = key);
+		ofNullable(launchValueAttribute).ifPresent(value -> this.launchValueAttribute = value);
 		ofNullable(filterId).ifPresent(id -> this.filterParams = FilterParams.of(filterId, launchesLimit, isLatest));
-	}*/
+	}
 
 	private HistoryRequestParams(int historyDepth, Long parentId, Long itemId, Long launchId, String historyType, Long filterId,
 			int launchesLimit, boolean isLatest) {
@@ -135,16 +135,21 @@ public class HistoryRequestParams {
 		return ofNullable(historyType);
 	}
 
-	/*public Optional<String> getLaunchAttributeKey() {
-		return ofNullable(launchKeyAttribute);
+	public String getLaunchAttributeKey() {
+		return launchKeyAttribute;
 	}
 
-	public Optional<String> getLaunchAttributeValue() {
-		return ofNullable(launchValueAttribute);
-	}*/
+	public String getLaunchAttributeValue() {
+		return launchValueAttribute;
+	}
 
 	public static HistoryRequestParams of(int historyDepth, Long parentId, Long itemId, Long launchId, String historyType, Long filterId,
 			int launchesLimit, boolean isLatest) {
 		return new HistoryRequestParams(historyDepth, parentId, itemId, launchId, historyType, filterId, launchesLimit, isLatest);
+	}
+
+	public static HistoryRequestParams of(int historyDepth, Long parentId, Long itemId, Long launchId, String historyType, Long filterId,
+			int launchesLimit, boolean isLatest, String launchKeyAttribute, String launchValueAttribute) {
+		return new HistoryRequestParams(historyDepth, parentId, itemId, launchId, historyType, filterId, launchesLimit, isLatest, launchKeyAttribute, launchValueAttribute);
 	}
 }

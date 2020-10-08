@@ -47,6 +47,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 import static com.epam.ta.reportportal.auth.permissions.Permissions.*;
 import static com.epam.ta.reportportal.commons.EntityUtils.normalizeId;
@@ -234,13 +236,16 @@ public class TestItemController {
 			@RequestParam(value = LAUNCHES_VALUE_FILTER, defaultValue = "", required = false) String launchValueAttribute,
 			@RequestParam(value = HISTORY_DEPTH_PARAM, required = false, defaultValue = HISTORY_DEPTH_DEFAULT_VALUE) int historyDepth) {
 
-		System.out.println("toto hladas!!!!!!!"+filter.toString()+"tu to konci!!!!!");
+		List<String> launchAttributeKeysList = new ArrayList<String>(Arrays.asList(launchKeyAttribute.split(",", -1)));
+		List<String> launchAttributeValuesList = new ArrayList<String>(Arrays.asList(launchValueAttribute.split(",", -1)));
+		launchAttributeKeysList.removeAll(Arrays.asList("", null));
+		launchAttributeValuesList.removeAll(Arrays.asList("", null));
 		return testItemsHistoryHandler.getItemsHistory(extractProjectDetails(user, projectName),
 				new CompositeFilter(Operator.AND, filter, predefinedFilter),
 				pageable,
 				HistoryRequestParams.of(historyDepth, parentId, itemId, launchId, type, filterId, launchesLimit, isLatest, 
-				launchKeyAttribute, launchValueAttribute),
-				user, launchKeyAttribute, launchValueAttribute
+				launchAttributeKeysList, launchAttributeValuesList),
+				user
 		);
 	}
 

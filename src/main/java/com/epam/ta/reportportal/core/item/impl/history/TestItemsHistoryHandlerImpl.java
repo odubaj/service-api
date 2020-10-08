@@ -100,8 +100,7 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 
 	@Override
 	public Iterable<TestItemHistoryElement> getItemsHistory(ReportPortalUser.ProjectDetails projectDetails, Queryable filter,
-			Pageable pageable, HistoryRequestParams historyRequestParams, ReportPortalUser user, 
-			String launchKeyAttribute, String launchValueAttribute) {
+			Pageable pageable, HistoryRequestParams historyRequestParams, ReportPortalUser user) {
 
 		validateHistoryDepth(historyRequestParams.getHistoryDepth());
 
@@ -135,7 +134,7 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 						testItemResource -> String.valueOf(testItemResource.getTestCaseHash()),
 				testItemHistoryPage,
 				projectDetails.getProjectId(),
-				pageable, launchKeyAttribute, launchValueAttribute
+				pageable
 		);
 
 	}
@@ -150,7 +149,7 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 		BusinessRule.expect(historyDepth, greaterThan.and(lessThan)).verify(UNABLE_LOAD_TEST_ITEM_HISTORY, historyDepthMessage);
 	}
 
-	private List<TestItem> getItemsWithLaunchAttributes(Iterable<Long> childIds, String key, String value) {
+	/*private List<TestItem> getItemsWithLaunchAttributes(Iterable<Long> childIds, String key, String value) {
 		List<TestItem> results = new ArrayList<TestItem>();
 
 		for (Long id : childIds) {
@@ -182,7 +181,7 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 		}
 
 		return results;
-	}
+	}*/
 
 	private void validateProjectRole(ReportPortalUser.ProjectDetails projectDetails, ReportPortalUser user) {
 		if (user.getUserRole() != UserRole.ADMINISTRATOR) {
@@ -191,8 +190,7 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 	}
 
 	private Iterable<TestItemHistoryElement> buildHistoryElements(Function<TestItemResource, String> groupingFunction,
-			Page<TestItemHistory> testItemHistoryPage, Long projectId, Pageable pageable, 
-			String launchKeyAttribute, String launchValueAttribute) {
+			Page<TestItemHistory> testItemHistoryPage, Long projectId, Pageable pageable) {
 		
 		Stream<Long> stream = testItemHistoryPage.getContent()
 				.stream()

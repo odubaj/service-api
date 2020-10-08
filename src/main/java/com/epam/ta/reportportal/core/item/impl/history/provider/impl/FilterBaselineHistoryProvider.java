@@ -98,8 +98,8 @@ public class FilterBaselineHistoryProvider implements HistoryProvider {
 							projectDetails.getProjectId(),
 							launch.getName(),
 							historyRequestParams.getHistoryDepth(),
-							historyRequestParams.getLaunchAttributeKey(),
-							historyRequestParams.getLaunchAttributeValue(),
+							historyRequestParams.getLaunchAttributeKeys(),
+							historyRequestParams.getLaunchAttributeValues(),
 							usingHash
 					);
 				}).orElseGet(() -> Page.empty(testItemQueryablePair.getRight())))
@@ -110,8 +110,8 @@ public class FilterBaselineHistoryProvider implements HistoryProvider {
 						testItemQueryablePair.getRight(),
 						projectDetails.getProjectId(),
 						historyRequestParams.getHistoryDepth(),
-						historyRequestParams.getLaunchAttributeKey(),
-						historyRequestParams.getLaunchAttributeValue(),
+						historyRequestParams.getLaunchAttributeKeys(),
+						historyRequestParams.getLaunchAttributeValues(),
 						usingHash
 				));
 	}

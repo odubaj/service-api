@@ -42,7 +42,6 @@ public interface TestItemsHistoryHandler {
 	 * @return {@link Iterable} of {@link TestItemHistoryElement}
 	 */
 	Iterable<TestItemHistoryElement> getItemsHistory(ReportPortalUser.ProjectDetails projectDetails, Queryable filter, Pageable pageable,
-			HistoryRequestParams historyRequestParams, ReportPortalUser user, 
-			String launchKeyAttribute, String launchValueAttribute);
+			HistoryRequestParams historyRequestParams, ReportPortalUser user);
 
 }

@@ -39,6 +39,8 @@ public final class LaunchReportConstants {
 	public final static String SI = "SI";
 	public final static String ND = "ND";
 	public final static String TI = "TI";
+	public final static String WAP = "WAP";
+	public final static String MT = "MT";
 
 	/* Data sets */
 	public final static String TEST_ITEMS = "TEST_ITEMS";

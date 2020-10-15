@@ -44,6 +44,8 @@ public class TestItemPojo {
 	private Integer automationBug;
 	private Integer productBug;
 	private Integer systemIssue;
+	private Integer manualTest;
+	private Integer waivedAsPassed;
 	private Integer noDefect;
 	private Integer toInvestigate;
 
@@ -72,6 +74,8 @@ public class TestItemPojo {
 		this.automationBug = getStatisticsCounter(statistics, DEFECTS_AUTOMATION_BUG_TOTAL);
 		this.productBug = getStatisticsCounter(statistics, DEFECTS_PRODUCT_BUG_TOTAL);
 		this.systemIssue = getStatisticsCounter(statistics, DEFECTS_SYSTEM_ISSUE_TOTAL);
+		this.waivedAsPassed = getStatisticsCounter(statistics, DEFECTS_WAIVED_AS_PASSED_TOTAL);
+		this.manualTest = getStatisticsCounter(statistics, DEFECTS_MANUAL_TEST_TOTAL);
 		this.noDefect = getStatisticsCounter(statistics, DEFECTS_NO_DEFECT_TOTAL);
 		this.toInvestigate = getStatisticsCounter(statistics, DEFECTS_TO_INVESTIGATE_TOTAL);
 	}
@@ -156,6 +160,22 @@ public class TestItemPojo {
 		return systemIssue;
 	}
 
+	public void setWaivedAsPassed(Integer value) {
+		this.waivedAsPassed = value;
+	}
+
+	public Integer getWaivedAsPassed() {
+		return waivedAsPassed;
+	}
+
+	public void setManualTest(Integer value) {
+		this.manualTest = value;
+	}
+
+	public Integer getManualTest() {
+		return manualTest;
+	}
+
 	public void setNoDefect(Integer value) {
 		this.noDefect = value;
 	}
@@ -198,6 +218,8 @@ public class TestItemPojo {
 		sb.append(", automationBug=").append(automationBug);
 		sb.append(", productBug=").append(productBug);
 		sb.append(", systemIssue=").append(systemIssue);
+		sb.append(", waivedAsPassed=").append(waivedAsPassed);
+		sb.append(", manualTest=").append(manualTest);
 		sb.append(", noDefect=").append(noDefect);
 		sb.append(", toInvestigate=").append(toInvestigate);
 		sb.append('}');

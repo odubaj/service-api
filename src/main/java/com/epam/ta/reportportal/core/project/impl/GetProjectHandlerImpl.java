@@ -50,10 +50,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.epam.ta.reportportal.entity.project.ProjectIssueType;
+
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.epam.ta.reportportal.commons.querygen.constant.GeneralCriteriaConstant.CRITERIA_PROJECT_ID;
@@ -99,8 +102,11 @@ public class GetProjectHandlerImpl implements GetProjectHandler {
 	@Override
 	public ProjectResource getProject(String projectName, ReportPortalUser user) {
 
+		//Long projectIdMy = projectRepository.findIdByName(projectName).get();
 		Project project = projectRepository.findByName(projectName)
 				.orElseThrow(() -> new ReportPortalException(ErrorType.PROJECT_NOT_FOUND, projectName));
+
+		Set<ProjectIssueType> result = project.getProjectIssueTypes();
 
 		return projectConverter.TO_PROJECT_RESOURCE.apply(project);
 	}

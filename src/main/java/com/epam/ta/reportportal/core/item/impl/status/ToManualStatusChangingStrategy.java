@@ -48,10 +48,10 @@ import static java.util.Optional.ofNullable;
  * @author <a href="mailto:ihar_kahadouski@epam.com">Ihar Kahadouski</a>
  */
 @Service
-public class ToFailedStatusChangingStrategy extends AbstractStatusChangingStrategy {
+public class ToManualStatusChangingStrategy extends AbstractStatusChangingStrategy {
 
 	@Autowired
-	public ToFailedStatusChangingStrategy(TestItemService testItemService, ProjectRepository projectRepository,
+	public ToManualStatusChangingStrategy(TestItemService testItemService, ProjectRepository projectRepository,
 			LaunchRepository launchRepository, IssueTypeHandler issueTypeHandler, MessageBus messageBus,
 			IssueEntityRepository issueEntityRepository, LogRepository logRepository, LogIndexer logIndexer) {
 		super(testItemService,
@@ -67,23 +67,19 @@ public class ToFailedStatusChangingStrategy extends AbstractStatusChangingStrate
 
 	@Override
 	protected void updateStatus(Project project, Launch launch, TestItem testItem, StatusEnum providedStatus, ReportPortalUser user) {
-		BusinessRule.expect(providedStatus, statusIn(StatusEnum.FAILED))
+		BusinessRule.expect(providedStatus, statusIn(StatusEnum.MANUAL))
 				.verify(INCORRECT_REQUEST,
 						Suppliers.formattedSupplier("Incorrect status - '{}', only '{}' is allowed", providedStatus, StatusEnum.FAILED)
 								.get()
 				);
 
-		System.out.println("som vo FAILED strategy");
+		System.out.println("som vo MANUAL strategy");
 		testItem.getItemResults().setStatus(providedStatus);
 		if (Objects.isNull(testItem.getRetryOf())) {
-			//if (testItem.getItemResults().getStatus() == StatusEnum.MANUAL) {
-				ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {
-					issueEntityRepository.delete(issue);
-				});
-			//}
-			//if (testItem.getItemResults().getIssue() == null && testItem.isHasStats()) {
-				addToInvestigateIssue(testItem, project.getId());
-			//}
+            ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {
+				issueEntityRepository.delete(issue);
+			});
+			addManualIssue(testItem, project.getId());
 
 			List<Long> itemsToReindex = changeParentsStatuses(testItem, launch, true, user);
 			itemsToReindex.add(testItem.getItemId());

@@ -153,6 +153,8 @@ public class EmailService extends JavaMailSenderImpl {
 		email.put("skipped", ofNullable(statistics.get(EXECUTIONS_SKIPPED)).orElse(0));
 
 		/* Launch issue statistics global counters */
+		email.put("waivedAsPassedTotal", ofNullable(statistics.get(DEFECTS_WAIVED_AS_PASSED_TOTAL)).orElse(0));
+		email.put("manualTestTotal", ofNullable(statistics.get(DEFECTS_MANUAL_TEST_TOTAL)).orElse(0));
 		email.put("productBugTotal", ofNullable(statistics.get(DEFECTS_PRODUCT_BUG_TOTAL)).orElse(0));
 		email.put("automationBugTotal", ofNullable(statistics.get(DEFECTS_AUTOMATION_BUG_TOTAL)).orElse(0));
 		email.put("systemIssueTotal", ofNullable(statistics.get(DEFECTS_SYSTEM_ISSUE_TOTAL)).orElse(0));
@@ -165,6 +167,8 @@ public class EmailService extends JavaMailSenderImpl {
 		/* Launch issue statistics custom sub-types */
 		fillEmail(email, "pbInfo", statistics, locatorsMapping, IssueRegexConstant.PRODUCT_BUG_ISSUE_REGEX);
 		fillEmail(email, "abInfo", statistics, locatorsMapping, IssueRegexConstant.AUTOMATION_BUG_ISSUE_REGEX);
+		fillEmail(email, "wapInfo", statistics, locatorsMapping, IssueRegexConstant.WAIVED_AS_PASSED_ISSUE_REGEX);
+		fillEmail(email, "mtInfo", statistics, locatorsMapping, IssueRegexConstant.MANUAL_TEST_ISSUE_REGEX);
 		fillEmail(email, "siInfo", statistics, locatorsMapping, IssueRegexConstant.SYSTEM_ISSUE_REGEX);
 		fillEmail(email, "ndInfo", statistics, locatorsMapping, IssueRegexConstant.NO_DEFECT_ISSUE_REGEX);
 		fillEmail(email, "tiInfo", statistics, locatorsMapping, IssueRegexConstant.TO_INVESTIGATE_ISSUE_REGEX);

@@ -179,6 +179,20 @@
                                             <@subtypes sbt=abInfo/>
                                         </#if>
 
+                                         <!-- WAIVED AS PASSED section -->
+                                        <#assign name="Waived as Passed">
+                                        <@maintype name="${name}" counter="${waivedAsPassedTotal}" />
+                                        <#if wapInfo??>
+                                            <@subtypes sbt=wapInfo/>
+                                        </#if>
+
+                                        <!-- MANUAL TEST section -->
+                                        <#assign name="Manual Tests">
+                                        <@maintype name="${name}" counter="${ManualTestTotal}" />
+                                        <#if mtInfo??>
+                                            <@subtypes sbt=mtInfo/>
+                                        </#if>
+
                                         <!-- SYSTEM ISSUE bugs section -->
                                         <#assign name="System Issues">
                                         <@maintype name="${name}" counter="${systemIssueTotal}" />

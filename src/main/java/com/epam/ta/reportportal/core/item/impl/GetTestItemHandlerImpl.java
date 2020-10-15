@@ -219,6 +219,7 @@ class GetTestItemHandlerImpl implements GetTestItemHandler {
 
 	@Override
 	public List<TestItemResource> getTestItems(Long[] ids, ReportPortalUser.ProjectDetails projectDetails, ReportPortalUser user) {
+		System.out.println("som v druhom gettestitems");
 		List<TestItem> items;
 		if (user.getUserRole() != UserRole.ADMINISTRATOR) {
 			items = testItemRepository.findByFilter(getItemsFilter(ids, projectDetails));

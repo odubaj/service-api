@@ -70,6 +70,7 @@ import static com.epam.ta.reportportal.core.hierarchy.AbstractFinishHierarchyHan
 import static com.epam.ta.reportportal.entity.enums.StatusEnum.*;
 import static com.epam.ta.reportportal.entity.enums.TestItemIssueGroup.NOT_ISSUE_FLAG;
 import static com.epam.ta.reportportal.entity.enums.TestItemIssueGroup.TO_INVESTIGATE;
+import static com.epam.ta.reportportal.entity.enums.TestItemIssueGroup.MANUAL_TEST;
 import static com.epam.ta.reportportal.entity.project.ProjectRole.PROJECT_MANAGER;
 import static com.epam.ta.reportportal.util.Predicates.ITEM_CAN_BE_INDEXED;
 import static com.epam.ta.reportportal.ws.converter.converters.TestItemConverter.TO_ACTIVITY_RESOURCE;
@@ -137,6 +138,7 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 				.orElseThrow(() -> new ReportPortalException(TEST_ITEM_NOT_FOUND, testItemId));
 
 		Launch launch = retrieveLaunch(testItem);
+		System.out.println("som vo finishtestitem");
 
 		TestItemResults testItemResults = processItemResults(user,
 				projectDetails,
@@ -175,6 +177,7 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 
 		validateRoles(user, projectDetails, launch);
 		verifyTestItem(testItem, fromValue(finishTestItemRQ.getStatus()), testItem.isHasChildren());
+		System.out.println("som v processitemresult");
 
 		TestItemResults testItemResults;
 		if (hasChildren) {
@@ -232,6 +235,7 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 	private TestItemResults processParentItemResult(TestItem testItem, FinishTestItemRQ finishTestItemRQ, Launch launch,
 			ReportPortalUser user, ReportPortalUser.ProjectDetails projectDetails) {
 
+		System.out.println("som v processparentitemresult");
 		TestItemResults testItemResults = testItem.getItemResults();
 		Optional<StatusEnum> actualStatus = fromValue(finishTestItemRQ.getStatus());
 
@@ -263,6 +267,7 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 				projectDetails.getProjectId()
 		);
 
+		System.out.println("som v processchilditemresult");
 		if (testItemResults.getStatus() == IN_PROGRESS) {
 			testItemResults.setStatus(actualStatus.orElse(INTERRUPTED));
 			resolvedIssue.ifPresent(issue -> {
@@ -325,6 +330,11 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 				&& testItem.isHasStats();
 	}
 
+	private boolean manualIssueIsRequired(TestItem testItem, StatusEnum status) {
+		return Preconditions.statusIn(MANUAL).test(status) && !ofNullable(testItem.getRetryOf()).isPresent()
+				&& testItem.isHasStats();
+	}
+
 	private Optional<IssueEntity> resolveIssue(ReportPortalUser user, StatusEnum status, TestItem testItem, @Nullable Issue issue,
 			Long projectId) {
 
@@ -352,12 +362,20 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 				return Optional.of(issueEntity);
 			});
 		}
+		if (manualIssueIsRequired(testItem, status)) {
+			System.out.println("manualna issue je potreba!!!!!!!!!!!!!!!!!!!!!!!!!1");
+			IssueEntity issueEntity = new IssueEntity();
+			IssueType manualTest = issueTypeHandler.defineIssueType(projectId, MANUAL_TEST.getLocator());
+			issueEntity.setIssueType(manualTest);
+			return Optional.of(issueEntity);
+		}
 		return Optional.empty();
 	}
 
 	private void updateFinishedItem(TestItemResults testItemResults, StatusEnum actualStatus, Optional<IssueEntity> resolvedIssue,
 			TestItem testItem, ReportPortalUser user, Long projectId) {
 
+		System.out.println("som v updateFinishedItem");
 		resolvedIssue.ifPresent(issue -> deleteOldIssueIndex(actualStatus, testItem, testItemResults, projectId));
 
 		if (testItemResults.getStatus() != actualStatus) {

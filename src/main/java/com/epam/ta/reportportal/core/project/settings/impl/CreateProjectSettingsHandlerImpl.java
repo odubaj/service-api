@@ -77,6 +77,8 @@ public class CreateProjectSettingsHandlerImpl implements CreateProjectSettingsHa
 			.put(SYSTEM_ISSUE.getValue(), "si_")
 			.put(NO_DEFECT.getValue(), "nd_")
 			.put(TO_INVESTIGATE.getValue(), "ti_")
+			.put(WAIVED_AS_PASSED.getValue(), "wap_")
+			.put(MANUAL_TEST.getValue(), "mt_")
 			.build();
 
 	private final ProjectRepository projectRepository;

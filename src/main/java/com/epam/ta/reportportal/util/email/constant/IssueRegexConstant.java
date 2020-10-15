@@ -23,6 +23,8 @@ public final class IssueRegexConstant {
 
 	public static final String PRODUCT_BUG_ISSUE_REGEX = "^statistics\\$defects\\$product_bug\\$((?!total$).)+.*$";
 	public static final String NO_DEFECT_ISSUE_REGEX = "^statistics\\$defects\\$no_defect\\$((?!total$).)+.*$";
+	public static final String WAIVED_AS_PASSED_ISSUE_REGEX = "^statistics\\$defects\\$waived_as_passed\\$((?!total$).)+.*$";
+	public static final String MANUAL_TEST_ISSUE_REGEX = "^statistics\\$defects\\$manual_test\\$((?!total$).)+.*$";
 	public static final String SYSTEM_ISSUE_REGEX = "^statistics\\$defects\\$system_issue\\$((?!total$).)+.*$";
 	public static final String AUTOMATION_BUG_ISSUE_REGEX = "^statistics\\$defects\\$automation_bug\\$((?!total$).)+.*$";
 	public static final String TO_INVESTIGATE_ISSUE_REGEX = "^statistics\\$defects\\$to_investigate\\$((?!total$).)+.*$";

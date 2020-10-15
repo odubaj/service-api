@@ -121,6 +121,20 @@ final class ContentUtils {
 		return issue;
 	}
 
+	static Issue getWaivedAsPassed() {
+		Issue issue = new Issue();
+		issue.setIssueType(WAIVED_AS_PASSED.getLocator());
+		issue.setComment(bugDescription("demo/content/comments/product.txt"));
+		return issue;
+	}
+
+	static Issue getManualTest() {
+		Issue issue = new Issue();
+		issue.setIssueType(MANUAL_TEST.getLocator());
+		issue.setComment(bugDescription("demo/content/comments/automation.txt"));
+		return issue;
+	}
+
 	static Issue getSystemIssue() {
 		Issue issue = new Issue();
 		issue.setIssueType(SYSTEM_ISSUE.getLocator());

@@ -45,6 +45,7 @@ import java.util.Optional;
 
 import static com.epam.ta.reportportal.entity.enums.StatusEnum.*;
 import static com.epam.ta.reportportal.entity.enums.TestItemIssueGroup.TO_INVESTIGATE;
+import static com.epam.ta.reportportal.entity.enums.TestItemIssueGroup.MANUAL_TEST;
 import static com.epam.ta.reportportal.ws.converter.converters.TestItemConverter.TO_ACTIVITY_RESOURCE;
 import static com.epam.ta.reportportal.ws.model.ErrorType.INCORRECT_REQUEST;
 import static com.epam.ta.reportportal.ws.model.ErrorType.PROJECT_NOT_FOUND;
@@ -109,6 +110,15 @@ public abstract class AbstractStatusChangingStrategy implements StatusChangingSt
 		IssueEntity issueEntity = new IssueEntity();
 		IssueType toInvestigate = issueTypeHandler.defineIssueType(projectId, TO_INVESTIGATE.getLocator());
 		issueEntity.setIssueType(toInvestigate);
+		issueEntity.setTestItemResults(testItem.getItemResults());
+		issueEntityRepository.save(issueEntity);
+		testItem.getItemResults().setIssue(issueEntity);
+	}
+
+	protected void addManualIssue(TestItem testItem, Long projectId) {
+		IssueEntity issueEntity = new IssueEntity();
+		IssueType manualTest = issueTypeHandler.defineIssueType(projectId, MANUAL_TEST.getLocator());
+		issueEntity.setIssueType(manualTest);
 		issueEntity.setTestItemResults(testItem.getItemResults());
 		issueEntityRepository.save(issueEntity);
 		testItem.getItemResults().setIssue(issueEntity);

@@ -152,6 +152,8 @@ public class UpdateProjectSettingsHandlerImpl implements UpdateProjectSettingsHa
 						PRODUCT_BUG.getLocator(),
 						SYSTEM_ISSUE.getLocator(),
 						NO_DEFECT.getLocator(),
+						MANUAL_TEST.getLocator(),
+						WAIVED_AS_PASSED.getLocator(),
 						TO_INVESTIGATE.getLocator()
 				)))
 		).verify(FORBIDDEN_OPERATION, "You cannot remove predefined global issue types.");

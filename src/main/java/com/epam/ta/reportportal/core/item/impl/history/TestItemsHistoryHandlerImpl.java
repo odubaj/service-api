@@ -106,11 +106,6 @@ public class TestItemsHistoryHandlerImpl implements TestItemsHistoryHandler {
 
 		validateProjectRole(projectDetails, user);
 
-		//z filtru musim vymazat launch attributes + ich ziskat - je to jedina moznost
-		//pretoze history sa najskor prefiltruje z item filtru a nasledne sa uz nic nefiltruje
-		//iba sa ziskavaju historicke data bez filtru -> zbytocne tam sa snazit nieco rvat
-		//proste to spravit na prasaka a prefiltrovat si ich tu a bude to pekne fungovat
-
 		CompositeFilter itemHistoryFilter = new CompositeFilter(Operator.AND,
 				filter,
 				Filter.builder()

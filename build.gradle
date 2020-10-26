@@ -56,7 +56,7 @@ dependencies {
         compile 'com.epam.reportportal:plugin-api'
     } else {
         //compile fileTree(dir: '/home/odubaj/DIPLOMKA/commons-dao/build/libs', include: ['*.jar'])
-        compile 'com.github.odubaj:commons-dao:a6534d2'
+        compile 'com.github.odubaj:commons-dao:adfaca6'
         compile 'com.github.reportportal:commons-rules:331c402'
         compile 'com.github.reportportal:commons-model:489aeb24'
         compile 'com.github.reportportal:commons:7480d61'

@@ -79,7 +79,6 @@ public class ToPassedStatusChangingStrategy extends AbstractStatusChangingStrate
 						).get()
 				);
 
-		System.out.println("som vo PASSED strategy");
 		testItem.getItemResults().setStatus(providedStatus);
 		if (Objects.isNull(testItem.getRetryOf())) {
 			ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {

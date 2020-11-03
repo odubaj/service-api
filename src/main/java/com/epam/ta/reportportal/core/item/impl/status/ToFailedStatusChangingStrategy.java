@@ -73,17 +73,12 @@ public class ToFailedStatusChangingStrategy extends AbstractStatusChangingStrate
 								.get()
 				);
 
-		System.out.println("som vo FAILED strategy");
 		testItem.getItemResults().setStatus(providedStatus);
 		if (Objects.isNull(testItem.getRetryOf())) {
-			//if (testItem.getItemResults().getStatus() == StatusEnum.MANUAL) {
-				ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {
-					issueEntityRepository.delete(issue);
-				});
-			//}
-			//if (testItem.getItemResults().getIssue() == null && testItem.isHasStats()) {
-				addToInvestigateIssue(testItem, project.getId());
-			//}
+			ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {
+				issueEntityRepository.delete(issue);
+			});
+			addToInvestigateIssue(testItem, project.getId());
 
 			List<Long> itemsToReindex = changeParentsStatuses(testItem, launch, true, user);
 			itemsToReindex.add(testItem.getItemId());

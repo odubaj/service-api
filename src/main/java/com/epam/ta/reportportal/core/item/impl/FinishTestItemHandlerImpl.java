@@ -138,7 +138,6 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 				.orElseThrow(() -> new ReportPortalException(TEST_ITEM_NOT_FOUND, testItemId));
 
 		Launch launch = retrieveLaunch(testItem);
-		System.out.println("som vo finishtestitem");
 
 		TestItemResults testItemResults = processItemResults(user,
 				projectDetails,
@@ -177,7 +176,6 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 
 		validateRoles(user, projectDetails, launch);
 		verifyTestItem(testItem, fromValue(finishTestItemRQ.getStatus()), testItem.isHasChildren());
-		System.out.println("som v processitemresult");
 
 		TestItemResults testItemResults;
 		if (hasChildren) {
@@ -235,7 +233,6 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 	private TestItemResults processParentItemResult(TestItem testItem, FinishTestItemRQ finishTestItemRQ, Launch launch,
 			ReportPortalUser user, ReportPortalUser.ProjectDetails projectDetails) {
 
-		System.out.println("som v processparentitemresult");
 		TestItemResults testItemResults = testItem.getItemResults();
 		Optional<StatusEnum> actualStatus = fromValue(finishTestItemRQ.getStatus());
 
@@ -267,7 +264,6 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 				projectDetails.getProjectId()
 		);
 
-		System.out.println("som v processchilditemresult");
 		if (testItemResults.getStatus() == IN_PROGRESS) {
 			testItemResults.setStatus(actualStatus.orElse(INTERRUPTED));
 			resolvedIssue.ifPresent(issue -> {
@@ -363,7 +359,6 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 			});
 		}
 		if (manualIssueIsRequired(testItem, status)) {
-			System.out.println("manualna issue je potreba!!!!!!!!!!!!!!!!!!!!!!!!!1");
 			IssueEntity issueEntity = new IssueEntity();
 			IssueType manualTest = issueTypeHandler.defineIssueType(projectId, MANUAL_TEST.getLocator());
 			issueEntity.setIssueType(manualTest);
@@ -375,7 +370,6 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 	private void updateFinishedItem(TestItemResults testItemResults, StatusEnum actualStatus, Optional<IssueEntity> resolvedIssue,
 			TestItem testItem, ReportPortalUser user, Long projectId) {
 
-		System.out.println("som v updateFinishedItem");
 		resolvedIssue.ifPresent(issue -> deleteOldIssueIndex(actualStatus, testItem, testItemResults, projectId));
 
 		if (testItemResults.getStatus() != actualStatus) {

@@ -73,7 +73,6 @@ public class ToManualStatusChangingStrategy extends AbstractStatusChangingStrate
 								.get()
 				);
 
-		System.out.println("som vo MANUAL strategy");
 		testItem.getItemResults().setStatus(providedStatus);
 		if (Objects.isNull(testItem.getRetryOf())) {
             ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {

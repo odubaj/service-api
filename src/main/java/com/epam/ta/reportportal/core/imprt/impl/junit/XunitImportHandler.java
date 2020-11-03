@@ -87,6 +87,7 @@ public class XunitImportHandler extends DefaultHandler {
 	private LocalDateTime startSuiteTime;
 
 	private Set<ItemAttributesRQ> attributes = new HashSet<ItemAttributesRQ>();
+	private Set<ItemAttributesRQ> launchAttributes = new HashSet<ItemAttributesRQ>();
 	private Set<ItemAttributesRQ> itemAttributes = new HashSet<ItemAttributesRQ>();
 	private Set<ItemAttributesRQ> archAttributes = new HashSet<ItemAttributesRQ>();
 	private List<ParameterResource> parameters = new ArrayList<ParameterResource>();
@@ -145,9 +146,13 @@ public class XunitImportHandler extends DefaultHandler {
 				message = new StringBuilder();
 				status = StatusEnum.MANUAL;
 				break;
+			case GLOBAL_PROPERTIES:
+				this.attributes.clear();
+				break;
 			case GLOBAL_PROPERTY:
 				ItemAttributesRQ attr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
 				this.attributes.add(attr);
+				this.launchAttributes.add(attr);
 				break;
 			case PARAMETERS:
 				//this.parameters.clear();
@@ -364,6 +369,6 @@ public class XunitImportHandler extends DefaultHandler {
 	}
 
 	public Set<ItemAttributesRQ> getAttributes() {
-		return this.attributes;
+		return this.launchAttributes;
 	}
 }

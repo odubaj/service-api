@@ -1,4 +1,4 @@
-FROM https://quay.io/repository/almworks/openjdk11:jre as builder
+FROM quay.io/repository/almworks/openjdk11:jre-11.0.9_11-ubuntu as builder
 
 RUN apt-get update && apt-get install ca-certificates git fonts-noto zip -y
 

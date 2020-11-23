@@ -1,4 +1,4 @@
-FROM quay.io/sdase/openjdk-development:11.0.9-hotspot as builder
+FROM quay.io/rogii/openjdk:11-corretto as builder
 
 RUN apt-get update && apt-get install ca-certificates git fonts-noto zip -y
 

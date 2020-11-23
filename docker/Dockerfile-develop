@@ -1,4 +1,4 @@
-FROM quay.io/almworks/openjdk11:x86_64-alpine-jre-11.0.7_10 as builder
+FROM quay.io/sdase/openjdk-development:11.0.9-hotspot as builder
 
 RUN apt-get update && apt-get install ca-certificates git fonts-noto zip -y
 

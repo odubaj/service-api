@@ -257,6 +257,7 @@ public class XunitImportHandler extends DefaultHandler {
 		}
 		StartTestItemRQ rq = buildStartTestRq(name);
 		String id = startTestItemHandler.startRootItem(user, projectDetails, rq).getId();
+		currentItemUuid = id;
 		itemUuids.push(id);
 	}
 
@@ -282,6 +283,7 @@ public class XunitImportHandler extends DefaultHandler {
 	private void startTestItem(String name) {
 		StartTestItemRQ rq = buildStartTestRq(name);
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
+		currentItemUuid = id;
 		itemUuids.push(id);
 	}
 

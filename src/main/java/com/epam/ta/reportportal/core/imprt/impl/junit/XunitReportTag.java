@@ -54,6 +54,10 @@ public enum XunitReportTag {
 	// name attribute for property, testcase and testsuite elements
 	ATTR_NAME("name"),
 
+	ATTR_ID("id"),
+
+	ATTR_ARCH("arch"),
+
 	// time attribute for testcase and testsuite elements
 	ATTR_TIME("time"),
 

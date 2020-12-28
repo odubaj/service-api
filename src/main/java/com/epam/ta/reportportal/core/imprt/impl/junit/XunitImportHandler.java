@@ -119,10 +119,13 @@ public class XunitImportHandler extends DefaultHandler {
 			case TESTSUITE:
 				if (itemUuids.isEmpty()) {
 					startRootItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
-							attributes.getValue(XunitReportTag.TIMESTAMP.getValue())
+							attributes.getValue(XunitReportTag.TIMESTAMP.getValue()),
+							attributes.getValue(XunitReportTag.ATTR_ID.getValue())
 					);
 				} else {
-					startTestItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()));
+					startTestItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
+							attributes.getValue(XunitReportTag.ATTR_ID.getValue())
+					);
 				}
 				break;
 			//case LOGS:
@@ -130,7 +133,9 @@ public class XunitImportHandler extends DefaultHandler {
 				//break;	
 			case TESTCASE:
 				startStepItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
-						attributes.getValue(XunitReportTag.ATTR_TIME.getValue())
+						attributes.getValue(XunitReportTag.ATTR_TIME.getValue()),
+						attributes.getValue(XunitReportTag.ATTR_ARCH.getValue()),
+						attributes.getValue(XunitReportTag.ATTR_ID.getValue())
 				);
 				break;
 			case ERROR:
@@ -247,7 +252,7 @@ public class XunitImportHandler extends DefaultHandler {
 		}
 	}
 
-	private void startRootItem(String name, String timestamp) {
+	private void startRootItem(String name, String timestamp, String identifier) {
 		if (null != timestamp) {
 			startItemTime = parseTimeStamp(timestamp);
 			if (startSuiteTime.isAfter(startItemTime)) {
@@ -257,6 +262,7 @@ public class XunitImportHandler extends DefaultHandler {
 			startItemTime = LocalDateTime.now();
 		}
 		StartTestItemRQ rq = buildStartTestRq(name);
+		rq.setTestCaseId(identifier);
 		String id = startTestItemHandler.startRootItem(user, projectDetails, rq).getId();
 		currentItemUuid = id;
 		itemUuids.push(id);
@@ -281,20 +287,31 @@ public class XunitImportHandler extends DefaultHandler {
 		return localDateTime;
 	}
 
-	private void startTestItem(String name) {
+	private void startTestItem(String name, String identifier) {
 		StartTestItemRQ rq = buildStartTestRq(name);
+		rq.setTestCaseId(identifier);
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
 		currentItemUuid = id;
 		itemUuids.push(id);
 	}
 
-	private void startStepItem(String name, String duration) {
+	private void startStepItem(String name, String duration, String arch, String identifier) {
 		StartTestItemRQ rq = new StartTestItemRQ();
 		rq.setLaunchUuid(launchUuid);
 		rq.setStartTime(EntityUtils.TO_DATE.apply(startItemTime));
 		rq.setType(TestItemTypeEnum.STEP.name());
 		rq.setName(name);
-		//rq.setParameters(this.parameters);
+		List<ParameterResource> parameters = new ArrayList<ParameterResource>();
+		ParameterResource par1 = new ParameterResource();
+		par1.setKey(new String("name"));
+		par1.setValue(name);
+		parameters.add(par1);
+		ParameterResource par2 = new ParameterResource();
+		par2.setKey(new String("arch"));
+		par2.setValue(arch);
+		parameters.add(par2);
+		rq.setParameters(parameters);
+		rq.setTestCaseId(identifier);
 		rq.setAttributes(this.attributes);
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
 		currentDuration = toMillis(duration);
@@ -322,7 +339,6 @@ public class XunitImportHandler extends DefaultHandler {
 		commonDuration += currentDuration;
 		rq.setEndTime(EntityUtils.TO_DATE.apply(startItemTime));
 		rq.setStatus(Optional.ofNullable(status).orElse(StatusEnum.PASSED).name());
-		//rq.setTestCaseId(); + treba ziskat parametry v ktorych bude na tejto urovni iba arch/meno-faze
 		currentItemUuid = itemUuids.poll();
 		finishTestItemHandler.finishTestItem(user, projectDetails, currentItemUuid, rq);
 		status = null;

@@ -92,7 +92,6 @@ public abstract class AbstractImportStrategy implements ImportStrategy {
 			ParseResults results, String baseUrl) {
 		FinishExecutionRQ finishExecutionRQ = new FinishExecutionRQ();
 		finishExecutionRQ.setEndTime(results.getEndTime());
-		//finishExecutionRQ.setAttributes(Sets.newHashSet(new ItemAttributesRQ("test", "test")));
 		finishExecutionRQ.setAttributes(results.getAttributes());
 		finishLaunchHandler.finishLaunch(launchId, finishExecutionRQ, projectDetails, user, baseUrl);
 		Launch launch = launchRepository.findByUuid(launchId)

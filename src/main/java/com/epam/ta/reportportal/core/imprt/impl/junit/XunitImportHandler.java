@@ -90,7 +90,7 @@ public class XunitImportHandler extends DefaultHandler {
 	private Set<ItemAttributesRQ> launchAttributes = new HashSet<ItemAttributesRQ>();
 	private Set<ItemAttributesRQ> itemAttributes = new HashSet<ItemAttributesRQ>();
 	private Set<ItemAttributesRQ> archAttributes = new HashSet<ItemAttributesRQ>();
-	private List<ParameterResource> parameters = new ArrayList<ParameterResource>();
+	//private List<ParameterResource> parameters = new ArrayList<ParameterResource>();
 
 	private long commonDuration;
 	private long currentDuration;
@@ -125,12 +125,12 @@ public class XunitImportHandler extends DefaultHandler {
 					startTestItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()));
 				}
 				break;
-			case LOGS:
-				this.parameters.clear();
-				break;	
+			//case LOGS:
+				//this.parameters.clear();
+				//break;	
 			case TESTCASE:
 				startStepItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
-						attributes.getValue(XunitReportTag.ATTR_TIME.getValue()), false
+						attributes.getValue(XunitReportTag.ATTR_TIME.getValue())
 				);
 				break;
 			case ERROR:
@@ -165,12 +165,12 @@ public class XunitImportHandler extends DefaultHandler {
 				//par.setKey(attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
 				//this.parameters.add(par);
 				break;
-			case LOG:
-				ParameterResource par = new ParameterResource();
-				par.setKey(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()));
-				par.setValue(attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
-				this.parameters.add(par);
-				break;
+			//case LOG:
+			//	ParameterResource par = new ParameterResource();
+			//	par.setKey(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()));
+			//	par.setValue(attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+			//	this.parameters.add(par);
+			//	break;
 			case PROPERTIES:
 				this.itemAttributes.clear();
 				break;
@@ -210,10 +210,10 @@ public class XunitImportHandler extends DefaultHandler {
 				this.archAttributes.clear();
 				//this.parameters.clear();
 				break;
-			case LOGS:
-				startStepItem(new String("LOGS"), new String("1"), true);
-				finishTestItem();
-				break;
+			//case LOGS:
+				//startStepItem(new String("LOGS"), new String("1"), true);
+				//finishTestItem();
+				//break;
 			case TESTCASE:
 				finishTestItem();
 				//this.parameters.clear();
@@ -223,6 +223,7 @@ public class XunitImportHandler extends DefaultHandler {
 			case FAILURE:
 			case MANUAL_TEST:
 			case SYSTEM_ERR:
+				//v properties musi byt aj vo vyssich leveloch ako test a arch ze je test manualny aby sa dalo filtrovat
 				attachLog(LogLevel.ERROR);
 				break;
 			case SYSTEM_OUT:
@@ -287,16 +288,13 @@ public class XunitImportHandler extends DefaultHandler {
 		itemUuids.push(id);
 	}
 
-	private void startStepItem(String name, String duration, boolean logsEnabled) {
+	private void startStepItem(String name, String duration) {
 		StartTestItemRQ rq = new StartTestItemRQ();
 		rq.setLaunchUuid(launchUuid);
 		rq.setStartTime(EntityUtils.TO_DATE.apply(startItemTime));
 		rq.setType(TestItemTypeEnum.STEP.name());
 		rq.setName(name);
-		if(logsEnabled) {
-			rq.setParameters(this.parameters);
-			//this.parameters.clear();
-		}
+		//rq.setParameters(this.parameters);
 		rq.setAttributes(this.attributes);
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
 		currentDuration = toMillis(duration);
@@ -324,6 +322,7 @@ public class XunitImportHandler extends DefaultHandler {
 		commonDuration += currentDuration;
 		rq.setEndTime(EntityUtils.TO_DATE.apply(startItemTime));
 		rq.setStatus(Optional.ofNullable(status).orElse(StatusEnum.PASSED).name());
+		//rq.setTestCaseId(); + treba ziskat parametry v ktorych bude na tejto urovni iba arch/meno-faze
 		currentItemUuid = itemUuids.poll();
 		finishTestItemHandler.finishTestItem(user, projectDetails, currentItemUuid, rq);
 		status = null;

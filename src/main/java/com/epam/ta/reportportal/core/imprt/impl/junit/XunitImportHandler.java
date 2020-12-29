@@ -120,11 +120,13 @@ public class XunitImportHandler extends DefaultHandler {
 				if (itemUuids.isEmpty()) {
 					startRootItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
 							attributes.getValue(XunitReportTag.TIMESTAMP.getValue()),
-							attributes.getValue(XunitReportTag.ATTR_ID.getValue())
+							attributes.getValue(XunitReportTag.ATTR_ID.getValue()),
+							attributes.getValue(XunitReportTag.ATTR_HREF.getValue())
 					);
 				} else {
 					startTestItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
-							attributes.getValue(XunitReportTag.ATTR_ID.getValue())
+							attributes.getValue(XunitReportTag.ATTR_ID.getValue()),
+							attributes.getValue(XunitReportTag.ATTR_HREF.getValue())
 					);
 				}
 				break;
@@ -252,7 +254,7 @@ public class XunitImportHandler extends DefaultHandler {
 		}
 	}
 
-	private void startRootItem(String name, String timestamp, String identifier) {
+	private void startRootItem(String name, String timestamp, String identifier, String code_ref) {
 		if (null != timestamp) {
 			startItemTime = parseTimeStamp(timestamp);
 			if (startSuiteTime.isAfter(startItemTime)) {
@@ -263,6 +265,9 @@ public class XunitImportHandler extends DefaultHandler {
 		}
 		StartTestItemRQ rq = buildStartTestRq(name);
 		rq.setTestCaseId(identifier);
+		if(code_ref != null && !code_ref.isEmpty()) {
+			rq.setCodeRef(code_ref);
+		}
 		String id = startTestItemHandler.startRootItem(user, projectDetails, rq).getId();
 		currentItemUuid = id;
 		itemUuids.push(id);
@@ -287,9 +292,12 @@ public class XunitImportHandler extends DefaultHandler {
 		return localDateTime;
 	}
 
-	private void startTestItem(String name, String identifier) {
+	private void startTestItem(String name, String identifier, String code_ref) {
 		StartTestItemRQ rq = buildStartTestRq(name);
 		rq.setTestCaseId(identifier);
+		if(code_ref != null && !code_ref.isEmpty()) {
+			rq.setCodeRef(code_ref);
+		}
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
 		currentItemUuid = id;
 		itemUuids.push(id);

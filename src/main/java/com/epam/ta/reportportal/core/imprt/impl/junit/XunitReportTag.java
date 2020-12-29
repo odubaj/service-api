@@ -58,6 +58,8 @@ public enum XunitReportTag {
 
 	ATTR_ARCH("arch"),
 
+	ATTR_HREF("href"),
+
 	// time attribute for testcase and testsuite elements
 	ATTR_TIME("time"),
 

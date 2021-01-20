@@ -71,7 +71,7 @@ import static com.epam.ta.reportportal.entity.enums.StatusEnum.*;
 import static com.epam.ta.reportportal.entity.enums.TestItemIssueGroup.NOT_ISSUE_FLAG;
 import static com.epam.ta.reportportal.entity.enums.TestItemIssueGroup.TO_INVESTIGATE;
 import static com.epam.ta.reportportal.entity.enums.TestItemIssueGroup.MANUAL_TEST;
-import static com.epam.ta.reportportal.entity.project.ProjectRole.PROJECT_MANAGER;
+import static com.epam.ta.reportportal.entity.project.ProjectRole.MEMBER;
 import static com.epam.ta.reportportal.util.Predicates.ITEM_CAN_BE_INDEXED;
 import static com.epam.ta.reportportal.ws.converter.converters.TestItemConverter.TO_ACTIVITY_RESOURCE;
 import static com.epam.ta.reportportal.ws.model.ErrorType.*;
@@ -222,7 +222,7 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 	private void validateRoles(ReportPortalUser user, ReportPortalUser.ProjectDetails projectDetails, Launch launch) {
 		if (user.getUserRole() != UserRole.ADMINISTRATOR) {
 			expect(launch.getProjectId(), equalTo(projectDetails.getProjectId())).verify(ACCESS_DENIED);
-			if (!launch.isRerun() && projectDetails.getProjectRole().lowerThan(PROJECT_MANAGER)) {
+			if (!launch.isRerun() && projectDetails.getProjectRole().lowerThan(MEMBER)) {
 				expect(user.getUserId(), Predicate.isEqual(launch.getUserId())).verify(FINISH_ITEM_NOT_ALLOWED,
 						"You are not a launch owner."
 				);

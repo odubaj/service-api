@@ -26,6 +26,7 @@ import com.epam.ta.reportportal.entity.enums.TestItemTypeEnum;
 import com.epam.ta.reportportal.ws.model.FinishTestItemRQ;
 import com.epam.ta.reportportal.ws.model.StartTestItemRQ;
 import com.epam.ta.reportportal.ws.model.log.SaveLogRQ;
+//import com.epam.ta.reportportal.ws.model.log.SaveLogRQ.File;
 import com.epam.ta.reportportal.ws.model.attribute.ItemAttributesRQ;
 import com.epam.ta.reportportal.ws.model.ParameterResource;
 import com.google.common.base.Strings;
@@ -53,6 +54,16 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.net.URL;
+
+// import java.nio.file.Files;
+// import java.nio.file.Paths;
+// import java.io.IOException;
+// import java.io.InputStream;
+// import java.net.URLConnection;
+// import java.util.Arrays;
+// import org.springframework.web.multipart.MultipartFile;
+// import org.springframework.mock.web.MockMultipartFile;
+// import org.springframework.http.MediaType;
 
 import static com.epam.ta.reportportal.core.imprt.impl.DateUtils.toMillis;
 
@@ -197,6 +208,8 @@ public class XunitImportHandler extends DefaultHandler {
 			case WARNING:
 				message = new StringBuilder();
 				break;
+			case TESTSUITES:
+				break;
 			case UNKNOWN:
 			default:
 				LOGGER.warn("Unknown tag: {}", qName);
@@ -238,6 +251,14 @@ public class XunitImportHandler extends DefaultHandler {
 				break;
 			case WARNING:
 				attachLog(LogLevel.WARN);
+				break;
+			case GLOBAL_PROPERTY:
+			case GLOBAL_PROPERTIES:
+			case PROPERTIES:
+			case PROPERTY:
+			case ARCH_PROPERTIES:
+			case ARCH_PROPERTY:
+			case TESTSUITES:
 				break;
 			case UNKNOWN:
 			default:
@@ -365,6 +386,34 @@ public class XunitImportHandler extends DefaultHandler {
 			}*/
 			saveLogRQ.setMessage(message.toString().trim());
 			saveLogRQ.setItemUuid(currentItemUuid);
+			// File attachement = new File();
+			// try {
+				
+			// 	attachement.setName("results");
+			// 	String charset = "UTF-8";
+			// 	String readLine;
+			// 	//System.out.println(Paths.get("home/odubaj/data.xml").toAbsolutePath());
+			// 	//byte[] encoded = Files.readAllBytes(Paths.get("home/odubaj/data.xml").toAbsolutePath());
+			// 	//System.out.println(Arrays.toString(encoded));
+			// 	URL url = new URL("https://kojipkgs.fedoraproject.org//packages/mysql-connector-java/8.0.23/1.fc34/data/logs/noarch/state.log");
+			// 	URLConnection conn = url.openConnection();
+			// 	conn.setRequestProperty("Accept-Charset", charset);
+			// 	InputStream in = conn.getInputStream();
+			// 	byte[] encoded = new byte[in.available()];
+			// 	in.read(encoded);
+			// 	MultipartFile file = new MockMultipartFile("name.txt", encoded);
+			// 	System.out.println(Arrays.toString(encoded));
+			// 	attachement.setContent(encoded);
+			// 	attachement.setContentType("text/plain");
+			// 	saveLogRQ.setFile(attachement);
+			// 	System.out.println("mala by sa pridat attachement!!!!!!!!!!!!!!!!!!!!!!");
+			// 	in.close();
+			// } catch (IOException e) {
+			// 	System.out.println("nepodarilo sa pridat attachement, exception "+ e);
+
+			// }
+
+			
 			createLogHandler.createLog(saveLogRQ, null, projectDetails);
 		}
 	}

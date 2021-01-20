@@ -136,6 +136,11 @@
                                             </td>
                                             <td width="40" style="font-size: 14px; color: #464547; border-width: 0px;">${passed}</td>
                                         </tr>
+                                        <tr bgcolor="#f9f9f9" style="background: #f9f9f9;">
+                                            <td height="25" style="font-size: 14px; color: #464547; padding-left: 38px; border-width: 0px;">Manual
+                                            </td>
+                                            <td width="40" style="font-size: 14px; color: #464547; border-width: 0px;">${manual}</td>
+                                        </tr>
                                         <tr bgcolor="#ffffff" style="background: #ffffff;">
                                             <td height="25" style="font-size: 14px; color: #464547; padding-left: 38px; border-width: 0px;">Failed
                                             </td>
@@ -188,7 +193,7 @@
 
                                         <!-- MANUAL TEST section -->
                                         <#assign name="Manual Tests">
-                                        <@maintype name="${name}" counter="${ManualTestTotal}" />
+                                        <@maintype name="${name}" counter="${manualTestTotal}" />
                                         <#if mtInfo??>
                                             <@subtypes sbt=mtInfo/>
                                         </#if>

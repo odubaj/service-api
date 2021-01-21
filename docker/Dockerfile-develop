@@ -34,7 +34,7 @@ RUN mkdir -p /home/rp-builder/plugins && \
     sh -c "echo '${sealightsToken}' > /home/rp-builder/sealights/sealights-token.txt" && \
     sh -c "echo '${sealightsSession}' > /home/rp-builder/sealights/sealights-session.txt"
 
-FROM quay.io/sdase/openjdk-runtime:11-jre-slim
+FROM quay.io/sdase/openjdk-runtime:11.0.9-hotspot
 
 ARG version
 

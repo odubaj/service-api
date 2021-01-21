@@ -60,4 +60,5 @@ class CreateDashboardHandlerImplTest {
 		);
 		assertEquals("Resource 'exist' already exists. You couldn't create the duplicate.", exception.getMessage());
 	}
+	
 }

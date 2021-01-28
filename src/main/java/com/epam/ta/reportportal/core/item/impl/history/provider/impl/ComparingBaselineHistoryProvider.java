@@ -76,6 +76,8 @@ public class ComparingBaselineHistoryProvider implements HistoryProvider {
 					projectDetails.getProjectId(),
 					launchIds,
 					historyRequestParams.getHistoryDepth(),
+					historyRequestParams.getLaunchAttributeKeys(),
+					historyRequestParams.getLaunchAttributeValues(),
 					usingHash
 			);
 

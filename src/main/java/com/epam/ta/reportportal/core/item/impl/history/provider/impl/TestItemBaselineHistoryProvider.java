@@ -129,12 +129,16 @@ public class TestItemBaselineHistoryProvider implements HistoryProvider {
 						projectDetails.getProjectId(),
 						launch.getName(),
 						historyRequestParams.getHistoryDepth(),
+						historyRequestParams.getLaunchAttributeKeys(),
+						historyRequestParams.getLaunchAttributeValues(),
 						usingHash
 				))
 				.orElseGet(() -> testItemRepository.loadItemsHistoryPage(filter,
 						pageable,
 						projectDetails.getProjectId(),
 						historyRequestParams.getHistoryDepth(),
+						historyRequestParams.getLaunchAttributeKeys(),
+						historyRequestParams.getLaunchAttributeValues(),
 						usingHash
 				));
 

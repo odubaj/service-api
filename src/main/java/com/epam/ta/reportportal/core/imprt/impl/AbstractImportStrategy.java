@@ -25,6 +25,7 @@ import com.epam.ta.reportportal.exception.ReportPortalException;
 import com.epam.ta.reportportal.ws.model.ErrorType;
 import com.epam.ta.reportportal.ws.model.FinishExecutionRQ;
 import com.epam.ta.reportportal.ws.model.launch.Mode;
+import com.epam.ta.reportportal.ws.model.attribute.ItemAttributesRQ;
 import com.epam.ta.reportportal.ws.model.launch.StartLaunchRQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +74,7 @@ public abstract class AbstractImportStrategy implements ImportStrategy {
 		Arrays.stream(futures).map(it -> (ParseResults) it.join()).forEach(res -> {
 			results.checkAndSetStartLaunchTime(res.getStartTime());
 			results.increaseDuration(res.getDuration());
+			results.setAttributes(res.getAttributes());
 		});
 		return results;
 	}
@@ -89,6 +91,7 @@ public abstract class AbstractImportStrategy implements ImportStrategy {
 			ParseResults results, String baseUrl) {
 		FinishExecutionRQ finishExecutionRQ = new FinishExecutionRQ();
 		finishExecutionRQ.setEndTime(results.getEndTime());
+		finishExecutionRQ.setAttributes(results.getAttributes());
 		finishLaunchHandler.finishLaunch(launchId, finishExecutionRQ, projectDetails, user, baseUrl);
 		Launch launch = launchRepository.findByUuid(launchId)
 				.orElseThrow(() -> new ReportPortalException(ErrorType.LAUNCH_NOT_FOUND, launchId));

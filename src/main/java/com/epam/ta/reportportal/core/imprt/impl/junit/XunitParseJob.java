@@ -64,7 +64,7 @@ public class XunitParseJob implements Callable<ParseResults> {
 		} catch (SAXException | IOException | ParserConfigurationException e) {
 			throw new ReportPortalException(ErrorType.PARSING_XML_ERROR, e.getMessage());
 		}
-		return new ParseResults(handler.getStartSuiteTime(), handler.getCommonDuration());
+		return new ParseResults(handler.getStartSuiteTime(), handler.getCommonDuration(), handler.getAttributes());
 	}
 
 	public XunitParseJob withParameters(ReportPortalUser.ProjectDetails projectDetails, String launchId, ReportPortalUser user,

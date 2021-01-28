@@ -17,15 +17,20 @@ package com.epam.ta.reportportal.core.imprt.impl;
 
 import com.epam.ta.reportportal.commons.EntityUtils;
 
+import com.epam.ta.reportportal.ws.model.attribute.ItemAttributesRQ;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Set;
 
 public class ParseResults {
 
 	private LocalDateTime startTime;
 
 	private long duration;
+
+	private Set<ItemAttributesRQ> attributes;
 
 	ParseResults() {
 		startTime = LocalDateTime.now();
@@ -34,6 +39,12 @@ public class ParseResults {
 	public ParseResults(LocalDateTime startTime, long duration) {
 		this.startTime = startTime;
 		this.duration = duration;
+	}
+
+	public ParseResults(LocalDateTime startTime, long duration, Set<ItemAttributesRQ> attributes) {
+		this.startTime = startTime;
+		this.duration = duration;
+		this.attributes = attributes;
 	}
 
 	public LocalDateTime getStartTime() {
@@ -56,5 +67,13 @@ public class ParseResults {
 
 	public Date getEndTime() {
 		return EntityUtils.TO_DATE.apply(startTime.plus(duration, ChronoUnit.MILLIS));
+	}
+
+	public Set<ItemAttributesRQ> getAttributes() {
+		return this.attributes;
+	}
+
+	public void setAttributes(Set<ItemAttributesRQ> attributes) {
+		this.attributes = attributes;
 	}
 }

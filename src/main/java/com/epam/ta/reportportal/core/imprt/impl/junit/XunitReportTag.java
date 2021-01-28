@@ -24,6 +24,15 @@ public enum XunitReportTag {
 	// the testsuite element
 	TESTSUITE("testsuite"),
 
+	// the testsuite-arch element
+	TESTSUITE_ARCH("testsuite-arch"),
+
+	// the parameters element
+	PARAMETERS("parameters"),
+
+	// the parameter element
+	PARAMETER("parameter"),
+
 	// the testcase element
 	TESTCASE("testcase"),
 
@@ -45,10 +54,23 @@ public enum XunitReportTag {
 	// name attribute for property, testcase and testsuite elements
 	ATTR_NAME("name"),
 
+	// identifier attribute for property, testcase and testsuite elements
+	ATTR_ID("id"),
+
+	// architecture attribute for property, testcase and testsuite elements
+	ATTR_ARCH("arch"),
+
+	// link attribute for property, testcase and testsuite elements
+	ATTR_HREF("href"),
+
 	// time attribute for testcase and testsuite elements
 	ATTR_TIME("time"),
 
+	// skipped element for skipped tests
 	SKIPPED("skipped"),
+
+	// manual element for manual tests
+	MANUAL_TEST("manual-test"),
 
 	// type attribute for failure and error elements
 	ATTR_TYPE("type"),
@@ -61,6 +83,18 @@ public enum XunitReportTag {
 
 	// the property element
 	PROPERTY("property"),
+
+	// the global_properties element
+	GLOBAL_PROPERTIES("global_properties"),
+
+	// the global_property element
+	GLOBAL_PROPERTY("global_property"),
+
+	// the arch_properties element
+	ARCH_PROPERTIES("arch-properties"),
+
+	// the arch_property element
+	ARCH_PROPERTY("arch-property"),
 
 	// value attribute for property elements
 	ATTR_VALUE("value"),

@@ -26,6 +26,8 @@ import com.epam.ta.reportportal.entity.enums.TestItemTypeEnum;
 import com.epam.ta.reportportal.ws.model.FinishTestItemRQ;
 import com.epam.ta.reportportal.ws.model.StartTestItemRQ;
 import com.epam.ta.reportportal.ws.model.log.SaveLogRQ;
+import com.epam.ta.reportportal.ws.model.attribute.ItemAttributesRQ;
+import com.epam.ta.reportportal.ws.model.ParameterResource;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +47,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.net.URL;
 
 import static com.epam.ta.reportportal.core.imprt.impl.DateUtils.toMillis;
 
@@ -78,6 +86,11 @@ public class XunitImportHandler extends DefaultHandler {
 
 	private LocalDateTime startSuiteTime;
 
+	private Set<ItemAttributesRQ> attributes = new HashSet<ItemAttributesRQ>();
+	private Set<ItemAttributesRQ> launchAttributes = new HashSet<ItemAttributesRQ>();
+	private Set<ItemAttributesRQ> itemAttributes = new HashSet<ItemAttributesRQ>();
+	private Set<ItemAttributesRQ> archAttributes = new HashSet<ItemAttributesRQ>();
+
 	private long commonDuration;
 	private long currentDuration;
 
@@ -101,18 +114,26 @@ public class XunitImportHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) {
 		switch (XunitReportTag.fromString(qName)) {
+			case TESTSUITE_ARCH:
 			case TESTSUITE:
 				if (itemUuids.isEmpty()) {
 					startRootItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
-							attributes.getValue(XunitReportTag.TIMESTAMP.getValue())
+							attributes.getValue(XunitReportTag.TIMESTAMP.getValue()),
+							attributes.getValue(XunitReportTag.ATTR_ID.getValue()),
+							attributes.getValue(XunitReportTag.ATTR_HREF.getValue())
 					);
 				} else {
-					startTestItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()));
+					startTestItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
+							attributes.getValue(XunitReportTag.ATTR_ID.getValue()),
+							attributes.getValue(XunitReportTag.ATTR_HREF.getValue())
+					);
 				}
 				break;
 			case TESTCASE:
 				startStepItem(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()),
-						attributes.getValue(XunitReportTag.ATTR_TIME.getValue())
+						attributes.getValue(XunitReportTag.ATTR_TIME.getValue()),
+						attributes.getValue(XunitReportTag.ATTR_ARCH.getValue()),
+						attributes.getValue(XunitReportTag.ATTR_ID.getValue())
 				);
 				break;
 			case ERROR:
@@ -124,10 +145,40 @@ public class XunitImportHandler extends DefaultHandler {
 				message = new StringBuilder();
 				status = StatusEnum.SKIPPED;
 				break;
+			case MANUAL_TEST:
+				message = new StringBuilder();
+				status = StatusEnum.SKIPPED;//will be changed to UNTESTED in future
+				break;
+			case GLOBAL_PROPERTIES:
+				this.attributes.clear();
+				break;
+			case GLOBAL_PROPERTY:
+				ItemAttributesRQ attr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				this.attributes.add(attr);
+				this.launchAttributes.add(attr);
+				break;
+			case PROPERTIES:
+				this.itemAttributes.clear();
+				break;
+			case ARCH_PROPERTIES:
+				this.archAttributes.clear();
+				break;		
+			case PROPERTY:
+				ItemAttributesRQ itemAttr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				this.itemAttributes.add(itemAttr);
+				break;
+			case ARCH_PROPERTY:
+				ItemAttributesRQ archAttr = new ItemAttributesRQ(attributes.getValue(XunitReportTag.ATTR_NAME.getValue()), attributes.getValue(XunitReportTag.ATTR_VALUE.getValue()));
+				this.archAttributes.add(archAttr);
+				break;
 			case SYSTEM_OUT:
 			case SYSTEM_ERR:
 			case WARNING:
 				message = new StringBuilder();
+				break;
+			case TESTSUITES:
+			case PARAMETERS:
+			case PARAMETER:
 				break;
 			case UNKNOWN:
 			default:
@@ -140,7 +191,12 @@ public class XunitImportHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) {
 		switch (XunitReportTag.fromString(qName)) {
 			case TESTSUITE:
-				finishRootItem();
+				finishRootItem(false);
+				this.itemAttributes.clear();
+				break;
+			case TESTSUITE_ARCH:
+				finishRootItem(true);
+				this.archAttributes.clear();
 				break;
 			case TESTCASE:
 				finishTestItem();
@@ -152,10 +208,19 @@ public class XunitImportHandler extends DefaultHandler {
 				attachLog(LogLevel.ERROR);
 				break;
 			case SYSTEM_OUT:
+			case MANUAL_TEST:
 				attachLog(LogLevel.INFO);
 				break;
 			case WARNING:
 				attachLog(LogLevel.WARN);
+				break;
+			case GLOBAL_PROPERTY:
+			case GLOBAL_PROPERTIES:
+			case PROPERTIES:
+			case PROPERTY:
+			case ARCH_PROPERTIES:
+			case ARCH_PROPERTY:
+			case TESTSUITES:
 				break;
 			case UNKNOWN:
 			default:
@@ -172,7 +237,7 @@ public class XunitImportHandler extends DefaultHandler {
 		}
 	}
 
-	private void startRootItem(String name, String timestamp) {
+	private void startRootItem(String name, String timestamp, String identifier, String code_ref) {
 		if (null != timestamp) {
 			startItemTime = parseTimeStamp(timestamp);
 			if (startSuiteTime.isAfter(startItemTime)) {
@@ -182,7 +247,12 @@ public class XunitImportHandler extends DefaultHandler {
 			startItemTime = LocalDateTime.now();
 		}
 		StartTestItemRQ rq = buildStartTestRq(name);
+		rq.setTestCaseId(identifier);
+		if(code_ref != null && !code_ref.isEmpty()) {
+			rq.setCodeRef(code_ref);
+		}
 		String id = startTestItemHandler.startRootItem(user, projectDetails, rq).getId();
+		currentItemUuid = id;
 		itemUuids.push(id);
 	}
 
@@ -205,27 +275,51 @@ public class XunitImportHandler extends DefaultHandler {
 		return localDateTime;
 	}
 
-	private void startTestItem(String name) {
+	private void startTestItem(String name, String identifier, String code_ref) {
 		StartTestItemRQ rq = buildStartTestRq(name);
+		rq.setTestCaseId(identifier);
+		if(code_ref != null && !code_ref.isEmpty()) {
+			rq.setCodeRef(code_ref);
+		}
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
+		currentItemUuid = id;
 		itemUuids.push(id);
 	}
 
-	private void startStepItem(String name, String duration) {
+	private void startStepItem(String name, String duration, String arch, String identifier) {
 		StartTestItemRQ rq = new StartTestItemRQ();
 		rq.setLaunchUuid(launchUuid);
 		rq.setStartTime(EntityUtils.TO_DATE.apply(startItemTime));
 		rq.setType(TestItemTypeEnum.STEP.name());
 		rq.setName(name);
+		List<ParameterResource> parameters = new ArrayList<ParameterResource>();
+		ParameterResource par1 = new ParameterResource();
+		par1.setKey(new String("name"));
+		par1.setValue(name);
+		parameters.add(par1);
+		ParameterResource par2 = new ParameterResource();
+		par2.setKey(new String("arch"));
+		par2.setValue(arch);
+		parameters.add(par2);
+		rq.setParameters(parameters);
+		rq.setTestCaseId(identifier);
+		rq.setAttributes(this.attributes);
 		String id = startTestItemHandler.startChildItem(user, projectDetails, rq, itemUuids.peek()).getId();
 		currentDuration = toMillis(duration);
 		currentItemUuid = id;
 		itemUuids.push(id);
 	}
 
-	private void finishRootItem() {
+	private void finishRootItem(boolean arch) {
 		FinishTestItemRQ rq = new FinishTestItemRQ();
 		rq.setEndTime(EntityUtils.TO_DATE.apply(startItemTime));
+		if(arch == true) {
+			this.archAttributes.addAll(this.attributes);
+			rq.setAttributes(this.archAttributes);
+		} else {
+			this.itemAttributes.addAll(this.attributes);
+			rq.setAttributes(this.itemAttributes);
+		}
 		finishTestItemHandler.finishTestItem(user, projectDetails, itemUuids.poll(), rq);
 		status = null;
 	}
@@ -274,5 +368,9 @@ public class XunitImportHandler extends DefaultHandler {
 
 	long getCommonDuration() {
 		return commonDuration;
+	}
+
+	public Set<ItemAttributesRQ> getAttributes() {
+		return this.launchAttributes;
 	}
 }

@@ -2,7 +2,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 def commonScriptsUrl = 'https://raw.githubusercontent.com/reportportal/gradle-scripts/'
-def migrationsScriptsUrl = 'https://raw.githubusercontent.com/reportportal/migrations/'
+def migrationsScriptsUrl = 'https://raw.githubusercontent.com/odubaj/migrations/'
 
 project.ext {
     limits = [
@@ -16,7 +16,7 @@ project.ext {
     isDebugMode = System.getProperty("DEBUG", "false") == "true"
     releaseMode = project.hasProperty("releaseMode")
     scriptsUrl = commonScriptsUrl + (releaseMode ? getProperty('scripts.version') : 'develop')
-    migrationsUrl = migrationsScriptsUrl + (releaseMode ? getProperty('migrations.version') : 'develop')
+    migrationsUrl = migrationsScriptsUrl + (releaseMode ? getProperty('migrations.version') : 'odubaj-official-deploy')
     testScriptsSrc = [
             (migrationsUrl + '/migrations/0_extensions.up.sql')                        : 'V001__extensions.sql',
             (migrationsUrl + '/migrations/1_initialize_schema.up.sql')                 : 'V002__initialize_schema.sql',

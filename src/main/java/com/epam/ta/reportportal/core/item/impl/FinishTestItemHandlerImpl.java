@@ -303,7 +303,7 @@ class FinishTestItemHandlerImpl implements FinishTestItemHandler {
 	}
 
 	private boolean isIssueRequired(TestItem testItem, StatusEnum status) {
-		return Preconditions.statusIn(FAILED, SKIPPED).test(status) && !ofNullable(testItem.getRetryOf()).isPresent()
+		return Preconditions.statusIn(FAILED, SKIPPED, UNTESTED).test(status) && !ofNullable(testItem.getRetryOf()).isPresent()
 				&& testItem.isHasStats();
 	}
 

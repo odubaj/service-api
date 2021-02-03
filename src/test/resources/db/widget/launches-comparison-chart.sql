@@ -135,6 +135,7 @@ insert into content_field(id, field)
 values (2, 'statistics$executions$total'),
        (2, 'statistics$executions$passed'),
        (2, 'statistics$executions$failed'),
+       (2, 'statistics$executions$untested'),
        (2, 'statistics$executions$skipped'),
        (2, 'statistics$defects$product_bug$pb001'),
        (2, 'statistics$defects$automation_bug$ab001'),

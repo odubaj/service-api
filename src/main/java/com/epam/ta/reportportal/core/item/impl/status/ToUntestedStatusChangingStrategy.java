@@ -48,10 +48,10 @@ import static java.util.Optional.ofNullable;
  * @author <a href="mailto:ihar_kahadouski@epam.com">Ihar Kahadouski</a>
  */
 @Service
-public class ToFailedStatusChangingStrategy extends AbstractStatusChangingStrategy {
+public class ToUntestedStatusChangingStrategy extends AbstractStatusChangingStrategy {
 
 	@Autowired
-	public ToFailedStatusChangingStrategy(TestItemService testItemService, ProjectRepository projectRepository,
+	public ToUntestedStatusChangingStrategy(TestItemService testItemService, ProjectRepository projectRepository,
 			LaunchRepository launchRepository, IssueTypeHandler issueTypeHandler, MessageBus messageBus,
 			IssueEntityRepository issueEntityRepository, LogRepository logRepository, LogIndexer logIndexer) {
 		super(testItemService,
@@ -67,15 +67,15 @@ public class ToFailedStatusChangingStrategy extends AbstractStatusChangingStrate
 
 	@Override
 	protected void updateStatus(Project project, Launch launch, TestItem testItem, StatusEnum providedStatus, ReportPortalUser user) {
-		BusinessRule.expect(providedStatus, statusIn(StatusEnum.FAILED))
+		BusinessRule.expect(providedStatus, statusIn(StatusEnum.UNTESTED))
 				.verify(INCORRECT_REQUEST,
-						Suppliers.formattedSupplier("Incorrect status - '{}', only '{}' is allowed", providedStatus, StatusEnum.FAILED)
+						Suppliers.formattedSupplier("Incorrect status - '{}', only '{}' is allowed", providedStatus, StatusEnum.UNTESTED)
 								.get()
 				);
 
 		testItem.getItemResults().setStatus(providedStatus);
 		if (Objects.isNull(testItem.getRetryOf())) {
-			ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {
+            ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {
 				issueEntityRepository.delete(issue);
 			});
 			addToInvestigateIssue(testItem, project.getId());
@@ -96,5 +96,4 @@ public class ToFailedStatusChangingStrategy extends AbstractStatusChangingStrate
 	protected StatusEnum evaluateParentItemStatus(TestItem parentItem, TestItem childItem) {
 		return StatusEnum.FAILED;
 	}
-
 }

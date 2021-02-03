@@ -147,7 +147,7 @@ public class XunitImportHandler extends DefaultHandler {
 				break;
 			case MANUAL_TEST:
 				message = new StringBuilder();
-				status = StatusEnum.SKIPPED;//will be changed to UNTESTED in future
+				status = StatusEnum.UNTESTED;
 				break;
 			case GLOBAL_PROPERTIES:
 				this.attributes.clear();

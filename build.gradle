@@ -65,17 +65,19 @@ dependencies {
         compile 'com.epam.reportportal:commons-fonts'
         compile 'com.epam.reportportal:plugin-api'
     } else {
-        compile 'com.github.reportportal:commons-dao:83527b09'
-        compile 'com.github.reportportal:commons-rules:331c402'
-        compile 'com.github.reportportal:commons-model:2662a59b'
-        compile 'com.github.reportportal:commons:7480d61'
-        compile 'com.github.reportportal:commons-fonts:10d1054'
-        compile 'com.github.reportportal:plugin-api:574b261'
+        compile 'com.github.odubaj:commons-dao:e6a9c2b'
+        //compile fileTree(dir: '/home/odubaj/DIPLOMKA/commons-dao/build/libs', include: ['*.jar'])
+        compile 'com.github.odubaj:commons-rules:e5d0d8f'
+        compile 'com.github.odubaj:commons-model:2a2f927'
+        compile 'com.github.reportportal:commons:22bb0294'
+        compile 'com.github.reportportal:commons-fonts:7f26d06'
+        compile 'com.github.odubaj:plugin-api:7b48f4d'
     }
 
     compile 'org.springframework.boot:spring-boot-starter-aop'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-quartz'
+    compile 'org.springframework.boot:spring-boot-starter-jdbc'
     compile 'org.springframework.boot:spring-boot-starter-freemarker'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-starter-amqp'
@@ -163,4 +165,4 @@ beforeReleaseBuild.dependsOn addDockerfileToGit
 bintrayUpload.mustRunAfter build
 afterReleaseBuild.dependsOn bintrayUpload
 checkCommitNeeded.dependsOn removeScripts
-build.dependsOn jacocoTestReport
+//build.dependsOn jacocoTestReport

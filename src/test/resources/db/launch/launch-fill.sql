@@ -784,11 +784,9 @@ INSERT INTO public.statistics (s_id, s_counter, launch_id, item_id, statistics_f
 VALUES (72, 4, 2, null, 2);
 
 INSERT INTO public.issue (issue_id, issue_type, issue_description, auto_analyzed, ignore_analyzer)
-VALUES (16, 3, null, false, false);
+VALUES (15, 3, null, false, false);
 INSERT INTO public.issue (issue_id, issue_type, issue_description, auto_analyzed, ignore_analyzer)
-VALUES (18, 1, null, false, false);
-INSERT INTO public.issue (issue_id, issue_type, issue_description, auto_analyzed, ignore_analyzer)
-VALUES (19, 3, null, false, false);
+VALUES (14, 1, null, false, false);
 
 alter sequence launch_id_seq RESTART WITH 6;
 alter sequence test_item_item_id_seq restart with 20;

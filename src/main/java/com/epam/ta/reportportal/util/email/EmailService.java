@@ -152,6 +152,7 @@ public class EmailService extends JavaMailSenderImpl {
 		email.put("total", ofNullable(statistics.get(EXECUTIONS_TOTAL)).orElse(0));
 		email.put("passed", ofNullable(statistics.get(EXECUTIONS_PASSED)).orElse(0));
 		email.put("failed", ofNullable(statistics.get(EXECUTIONS_FAILED)).orElse(0));
+		email.put("untested", ofNullable(statistics.get(EXECUTIONS_UNTESTED)).orElse(0));
 		email.put("skipped", ofNullable(statistics.get(EXECUTIONS_SKIPPED)).orElse(0));
 		email.put("untested", ofNullable(statistics.get(EXECUTIONS_UNTESTED)).orElse(0));
 

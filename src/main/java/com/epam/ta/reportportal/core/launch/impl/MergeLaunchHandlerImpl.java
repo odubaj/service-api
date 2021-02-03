@@ -134,11 +134,11 @@ public class MergeLaunchHandlerImpl implements MergeLaunchHandler {
 	private void validateMergingLaunches(List<Launch> launches, ReportPortalUser user, ReportPortalUser.ProjectDetails projectDetails) {
 
 		/*
-		 * ADMINISTRATOR and PROJECT_MANAGER+ users have permission to merge not-only-own
+		 * ADMINISTRATOR and MEMBER+ users have permission to merge not-only-own
 		 * launches
 		 */
 		boolean isUserValidate = !(user.getUserRole().equals(ADMINISTRATOR) || projectDetails.getProjectRole()
-				.sameOrHigherThan(ProjectRole.PROJECT_MANAGER));
+				.sameOrHigherThan(ProjectRole.MEMBER));
 
 		launches.forEach(launch -> {
 			expect(launch, notNull()).verify(LAUNCH_NOT_FOUND, launch);
@@ -153,7 +153,7 @@ public class MergeLaunchHandlerImpl implements MergeLaunchHandler {
 
 			if (isUserValidate) {
 				expect(launch.getUserId(), equalTo(user.getUserId())).verify(ACCESS_DENIED,
-						"You are not an owner of launches or have less than PROJECT_MANAGER project role."
+						"You are not an owner of launches or have less than MEMBER project role."
 				);
 			}
 		});

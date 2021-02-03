@@ -177,8 +177,6 @@ public class XunitImportHandler extends DefaultHandler {
 				message = new StringBuilder();
 				break;
 			case TESTSUITES:
-			case PARAMETERS:
-			case PARAMETER:
 				break;
 			case UNKNOWN:
 			default:

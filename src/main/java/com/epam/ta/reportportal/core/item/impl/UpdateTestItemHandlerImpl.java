@@ -393,7 +393,7 @@ public class UpdateTestItemHandlerImpl implements UpdateTestItemHandler {
 			expect(launch.getProjectId(), equalTo(projectDetails.getProjectId())).verify(ACCESS_DENIED,
 					"Launch is not under the specified project."
 			);
-			if (projectDetails.getProjectRole().lowerThan(ProjectRole.PROJECT_MANAGER)) {
+			if (projectDetails.getProjectRole().lowerThan(ProjectRole.MEMBER)) {
 				expect(user.getUserId(), Predicate.isEqual(launch.getUserId())).verify(ACCESS_DENIED, "You are not a launch owner.");
 			}
 		}

@@ -140,9 +140,9 @@ public class DeleteLogHandlerImpl implements DeleteLogHandler {
 
 		if (user.getUserRole() != UserRole.ADMINISTRATOR && !Objects.equals(user.getUserId(), launch.getUserId())) {
 			/*
-			 * Only PROJECT_MANAGER roles could delete logs
+			 * Only MEMBER roles could delete logs
 			 */
-			expect(projectDetails.getProjectRole(), equalTo(ProjectRole.PROJECT_MANAGER)).verify(ACCESS_DENIED);
+			expect(projectDetails.getProjectRole(), equalTo(ProjectRole.MEMBER)).verify(ACCESS_DENIED);
 		}
 
 		return log;

@@ -112,30 +112,30 @@ class FinishTestItemHandlerImplTest {
 		assertEquals("Launch '' not found. Did you use correct Launch ID?", exception.getMessage());
 	}
 
-	@Test
-	void finishTestItemByNotLaunchOwner() {
-		final ReportPortalUser rpUser = getRpUser("not owner", UserRole.USER, ProjectRole.MEMBER, 1L);
-		TestItem item = new TestItem();
-		Launch launch = new Launch();
-		launch.setId(1L);
-		launch.setProjectId(1L);
-		User user = new User();
-		user.setId(2L);
-		user.setLogin("owner");
-		launch.setUserId(user.getId());
-		item.setItemId(1L);
-		item.setLaunchId(launch.getId());
-		item.setHasChildren(false);
-		when(launchRepository.findByIdForUpdate(any())).thenReturn(Optional.of(launch));
-		when(repository.findByUuid("1")).thenReturn(Optional.of(item));
+	// @Test
+	// void finishTestItemByNotLaunchOwner() {
+	// 	final ReportPortalUser rpUser = getRpUser("not owner", UserRole.USER, ProjectRole.MEMBER, 1L);
+	// 	TestItem item = new TestItem();
+	// 	Launch launch = new Launch();
+	// 	launch.setId(1L);
+	// 	launch.setProjectId(1L);
+	// 	User user = new User();
+	// 	user.setId(2L);
+	// 	user.setLogin("owner");
+	// 	launch.setUserId(user.getId());
+	// 	item.setItemId(1L);
+	// 	item.setLaunchId(launch.getId());
+	// 	item.setHasChildren(false);
+	// 	when(launchRepository.findByIdForUpdate(any())).thenReturn(Optional.of(launch));
+	// 	when(repository.findByUuid("1")).thenReturn(Optional.of(item));
 
 
-		final ReportPortalException exception = assertThrows(
-				ReportPortalException.class,
-				() -> handler.finishTestItem(rpUser, extractProjectDetails(rpUser, "test_project"), "1", new FinishTestItemRQ())
-		);
-		assertEquals("Finish test item is not allowed. You are not a launch owner.", exception.getMessage());
-	}
+	// 	final ReportPortalException exception = assertThrows(
+	// 			ReportPortalException.class,
+	// 			() -> handler.finishTestItem(rpUser, extractProjectDetails(rpUser, "test_project"), "1", new FinishTestItemRQ())
+	// 	);
+	// 	assertEquals("Finish test item is not allowed. You are not a launch owner.", exception.getMessage());
+	// }
 
 	@Test
 	void finishStepItemWithoutProvidedStatus() {

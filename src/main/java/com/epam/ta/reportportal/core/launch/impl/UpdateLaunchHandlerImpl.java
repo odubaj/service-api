@@ -56,7 +56,7 @@ import java.util.function.Predicate;
 
 import static com.epam.ta.reportportal.commons.Predicates.equalTo;
 import static com.epam.ta.reportportal.commons.validation.BusinessRule.expect;
-import static com.epam.ta.reportportal.entity.project.ProjectRole.PROJECT_MANAGER;
+import static com.epam.ta.reportportal.entity.project.ProjectRole.MEMBER;
 import static com.epam.ta.reportportal.ws.model.ErrorType.*;
 import static java.util.stream.Collectors.toList;
 
@@ -209,7 +209,7 @@ public class UpdateLaunchHandlerImpl implements UpdateLaunchHandler {
 		}
 		if (user.getUserRole() != UserRole.ADMINISTRATOR) {
 			expect(launch.getProjectId(), equalTo(projectDetails.getProjectId())).verify(ACCESS_DENIED);
-			if (projectDetails.getProjectRole().lowerThan(PROJECT_MANAGER)) {
+			if (projectDetails.getProjectRole().lowerThan(MEMBER)) {
 				expect(user.getUserId(), Predicate.isEqual(launch.getUserId())).verify(ACCESS_DENIED);
 			}
 		}

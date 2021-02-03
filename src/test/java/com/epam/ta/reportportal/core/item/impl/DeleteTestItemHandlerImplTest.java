@@ -149,24 +149,24 @@ class DeleteTestItemHandlerImplTest {
 		assertEquals("Forbidden operation. Deleting testItem '1' is not under specified project '1'", exception.getMessage());
 	}
 
-	@Test
-	void deleteNotOwnTestItem() {
-		final ReportPortalUser rpUser = getRpUser("not owner", UserRole.USER, ProjectRole.MEMBER, 1L);
-		rpUser.setUserId(2L);
+	// @Test
+	// void deleteNotOwnTestItem() {
+	// 	final ReportPortalUser rpUser = getRpUser("not owner", UserRole.USER, ProjectRole.MEMBER, 1L);
+	// 	rpUser.setUserId(2L);
 
-		Launch launch = new Launch();
-		launch.setStatus(StatusEnum.PASSED);
-		launch.setProjectId(1L);
-		launch.setUserId(1L);
+	// 	Launch launch = new Launch();
+	// 	launch.setStatus(StatusEnum.PASSED);
+	// 	launch.setProjectId(1L);
+	// 	launch.setUserId(1L);
 
-		when(testItemRepository.findById(1L)).thenReturn(Optional.of(getTestItem(StatusEnum.PASSED, StatusEnum.FAILED, 1L, "owner")));
-		when(launchRepository.findById(any(Long.class))).thenReturn(Optional.of(launch));
+	// 	when(testItemRepository.findById(1L)).thenReturn(Optional.of(getTestItem(StatusEnum.PASSED, StatusEnum.FAILED, 1L, "owner")));
+	// 	when(launchRepository.findById(any(Long.class))).thenReturn(Optional.of(launch));
 
-		final ReportPortalException exception = assertThrows(ReportPortalException.class,
-				() -> handler.deleteTestItem(1L, extractProjectDetails(rpUser, "test_project"), rpUser)
-		);
-		assertEquals("You do not have enough permissions. You are not a launch owner.", exception.getMessage());
-	}
+	// 	final ReportPortalException exception = assertThrows(ReportPortalException.class,
+	// 			() -> handler.deleteTestItem(1L, extractProjectDetails(rpUser, "test_project"), rpUser)
+	// 	);
+	// 	assertEquals("You do not have enough permissions. You are not a launch owner.", exception.getMessage());
+	// }
 
 	@Test
 	void deleteTestItemWithParent() {

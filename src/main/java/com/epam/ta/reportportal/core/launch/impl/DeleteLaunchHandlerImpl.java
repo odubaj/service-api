@@ -44,7 +44,7 @@ import static com.epam.ta.reportportal.commons.Predicates.equalTo;
 import static com.epam.ta.reportportal.commons.Predicates.not;
 import static com.epam.ta.reportportal.commons.validation.BusinessRule.expect;
 import static com.epam.ta.reportportal.commons.validation.Suppliers.formattedSupplier;
-import static com.epam.ta.reportportal.entity.project.ProjectRole.PROJECT_MANAGER;
+import static com.epam.ta.reportportal.entity.project.ProjectRole.MEMBER;
 import static com.epam.ta.reportportal.ws.converter.converters.LaunchConverter.TO_ACTIVITY_RESOURCE;
 import static com.epam.ta.reportportal.ws.model.ErrorType.*;
 
@@ -147,8 +147,8 @@ public class DeleteLaunchHandlerImpl implements DeleteLaunchHandler {
 			expect(launch.getProjectId(), equalTo(projectDetails.getProjectId())).verify(FORBIDDEN_OPERATION,
 					formattedSupplier("Target launch '{}' not under specified project '{}'", launch.getId(), projectDetails.getProjectId())
 			);
-			/* Only PROJECT_MANAGER roles could delete launches */
-			if (projectDetails.getProjectRole().lowerThan(PROJECT_MANAGER)) {
+			/* Only MEMBER roles could delete launches */
+			if (projectDetails.getProjectRole().lowerThan(MEMBER)) {
 				expect(user.getUserId(), Predicate.isEqual(launch.getUserId())).verify(ACCESS_DENIED, "You are not launch owner.");
 			}
 		}

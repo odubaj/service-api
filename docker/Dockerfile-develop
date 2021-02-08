@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jdk-hotspot-bionic as builder
+FROM quay.io/rogii/openjdk:11-corretto as builder
 
 RUN apt-get update && apt-get install ca-certificates git fonts-noto zip -y
 

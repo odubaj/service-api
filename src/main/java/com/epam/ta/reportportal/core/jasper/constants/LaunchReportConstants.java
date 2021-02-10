@@ -35,10 +35,10 @@ public final class LaunchReportConstants {
 	public final static String FAILED = "FAILED";
 	public final static String SKIPPED = "SKIPPED";
 	public final static String UNTESTED = "UNTESTED";
-	public final static String AB = "AB";
+	public final static String TB = "TB";
 	public final static String PB = "PB";
 	public final static String SI = "SI";
-	public final static String ND = "ND";
+	public final static String MD = "MD";
 	public final static String TI = "TI";
 
 	/* Data sets */

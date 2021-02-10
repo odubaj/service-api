@@ -675,7 +675,7 @@ class TestItemControllerTest extends BaseMvcTest {
 		assertTrue(updatedItem.isPresent());
 		assertEquals(StatusEnum.SKIPPED, updatedItem.get().getItemResults().getStatus());
 		assertEquals(
-				TestItemIssueGroup.AUTOMATION_BUG,
+				TestItemIssueGroup.TEST_BUG,
 				updatedItem.get().getItemResults().getIssue().getIssueType().getIssueGroup().getTestItemIssueGroup()
 		);
 		assertEquals(StatusEnum.FAILED, updatedItem.get().getParent().getItemResults().getStatus());

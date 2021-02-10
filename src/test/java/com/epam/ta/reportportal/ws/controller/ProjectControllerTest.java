@@ -429,7 +429,7 @@ class ProjectControllerTest extends BaseMvcTest {
 		mockMvc.perform(get("/v1/project/test_project/widget/issuesChart").with(token(oAuthHelper.getSuperadminToken())))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$..values.systemIssue").value("0"))
-				.andExpect(jsonPath("$..values.automationBug").value("0"))
+				.andExpect(jsonPath("$..values.testBug").value("0"))
 				.andExpect(jsonPath("$..values.toInvestigate").value("2"))
 				.andExpect(jsonPath("$..values.productBug").value("1"));
 	}

@@ -99,7 +99,8 @@ public class ProjectInfoWidgetDataConverter {
 						investigated + extractStatisticsCount(DEFECTS_PRODUCT_BUG_TOTAL, one.getStatistics()) + extractStatisticsCount(
 								DEFECTS_SYSTEM_ISSUE_TOTAL,
 								one.getStatistics()
-						) + extractStatisticsCount(DEFECTS_AUTOMATION_BUG_TOTAL, one.getStatistics());
+						) + extractStatisticsCount(DEFECTS_TEST_BUG_TOTAL, one.getStatistics())
+						  + extractStatisticsCount(DEFECTS_MINOR_DEFECT_TOTAL, one.getStatistics());
 				toInvestigate = toInvestigate + extractStatisticsCount(DEFECTS_TO_INVESTIGATE_TOTAL, one.getStatistics());
 			}
 			if ((investigated + toInvestigate) > 0) {
@@ -223,29 +224,33 @@ public class ProjectInfoWidgetDataConverter {
 		}
 		final String PB = "productBug";
 		final String SI = "systemIssue";
-		final String AB = "automationBug";
+		final String TB = "testBug";
 		final String TI = "toInvestigate";
+		final String MD = "minorDefect";
 
 		ProjectInfoGroup criteria = grouping.get(interval);
 		Map<String, List<Launch>> grouped = groupBy(initial, criteria);
 		for (Entry<String, List<Launch>> entry : grouped.entrySet()) {
 			List<Launch> launches = entry.getValue();
 			Integer pbCount = 0;
-			Integer abCount = 0;
+			Integer tbCount = 0;
 			Integer siCount = 0;
 			Integer tiCount = 0;
+			Integer mdCount = 0;
 			for (Launch launch : launches) {
 				pbCount += extractStatisticsCount(DEFECTS_PRODUCT_BUG_TOTAL, launch.getStatistics());
-				abCount += extractStatisticsCount(DEFECTS_AUTOMATION_BUG_TOTAL, launch.getStatistics());
+				tbCount += extractStatisticsCount(DEFECTS_TEST_BUG_TOTAL, launch.getStatistics());
 				siCount += extractStatisticsCount(DEFECTS_SYSTEM_ISSUE_TOTAL, launch.getStatistics());
 				tiCount += extractStatisticsCount(DEFECTS_TO_INVESTIGATE_TOTAL, launch.getStatistics());
+				mdCount += extractStatisticsCount(DEFECTS_MINOR_DEFECT_TOTAL, launch.getStatistics());
 			}
 			ChartObject object = new ChartObject();
 			Map<String, String> values = new HashMap<>();
 			values.put(PB, String.valueOf(pbCount));
 			values.put(SI, String.valueOf(siCount));
-			values.put(AB, String.valueOf(abCount));
+			values.put(TB, String.valueOf(tbCount));
 			values.put(TI, String.valueOf(tiCount));
+			values.put(MD, String.valueOf(mdCount));
 			object.setValues(values);
 			result.put(entry.getKey(), Collections.singletonList(object));
 		}

@@ -72,14 +72,14 @@
         </field>
         <field name="skipped" class="java.lang.Integer"/>
         <field name="untested" class="java.lang.Integer"/>
-        <field name="automationBug" class="java.lang.Integer">
+        <field name="testBug" class="java.lang.Integer">
             <fieldDescription><![CDATA[]]></fieldDescription>
         </field>
         <field name="productBug" class="java.lang.Integer">
             <fieldDescription><![CDATA[]]></fieldDescription>
         </field>
         <field name="systemIssue" class="java.lang.Integer"/>
-        <field name="noDefect" class="java.lang.Integer">
+        <field name="minorDefect" class="java.lang.Integer">
             <fieldDescription><![CDATA[]]></fieldDescription>
         </field>
         <field name="toInvestigate" class="java.lang.Integer">
@@ -731,7 +731,7 @@
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font fontName="Noto Sans" size="9"/>
                                 </textElement>
-                                <textFieldExpression><![CDATA[$F{automationBug}.toString()]]></textFieldExpression>
+                                <textFieldExpression><![CDATA[$F{testBug}.toString()]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
@@ -794,7 +794,7 @@
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font fontName="Noto Sans" size="9"/>
                                 </textElement>
-                                <textFieldExpression><![CDATA[$F{noDefect}.toString()]]></textFieldExpression>
+                                <textFieldExpression><![CDATA[$F{minorDefect}.toString()]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>

@@ -114,10 +114,10 @@ final class ContentUtils {
 		return issue;
 	}
 
-	static Issue getAutomationBug() {
+	static Issue getTestBug() {
 		Issue issue = new Issue();
-		issue.setIssueType(AUTOMATION_BUG.getLocator());
-		issue.setComment(bugDescription("demo/content/comments/automation.txt"));
+		issue.setIssueType(TEST_BUG.getLocator());
+		issue.setComment(bugDescription("demo/content/comments/test.txt"));
 		return issue;
 	}
 
@@ -132,6 +132,13 @@ final class ContentUtils {
 		Issue issue = new Issue();
 		issue.setIssueType(TO_INVESTIGATE.getLocator());
 		issue.setComment(bugDescription("demo/content/comments/investigate.txt"));
+		return issue;
+	}
+
+	static Issue getMinorDefect() {
+		Issue issue = new Issue();
+		issue.setIssueType(MINOR_DEFECT.getLocator());
+		issue.setComment(bugDescription("demo/content/comments/minor.txt"));
 		return issue;
 	}
 

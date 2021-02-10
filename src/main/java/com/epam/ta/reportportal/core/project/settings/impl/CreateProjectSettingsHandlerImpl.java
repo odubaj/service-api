@@ -72,10 +72,10 @@ import static com.epam.ta.reportportal.ws.model.ErrorType.*;
 @Transactional
 public class CreateProjectSettingsHandlerImpl implements CreateProjectSettingsHandler {
 
-	private static final Map<String, String> PREFIX = ImmutableMap.<String, String>builder().put(AUTOMATION_BUG.getValue(), "ab_")
+	private static final Map<String, String> PREFIX = ImmutableMap.<String, String>builder().put(TEST_BUG.getValue(), "ab_")
 			.put(PRODUCT_BUG.getValue(), "pb_")
 			.put(SYSTEM_ISSUE.getValue(), "si_")
-			.put(NO_DEFECT.getValue(), "nd_")
+			.put(MINOR_DEFECT.getValue(), "md_")
 			.put(TO_INVESTIGATE.getValue(), "ti_")
 			.build();
 

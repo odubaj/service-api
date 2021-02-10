@@ -94,7 +94,7 @@ values (2, 'name'),
        (2, 'statistics$executions$skipped'),
        (2, 'statistics$executions$untested'),
        (2, 'statistics$defects$product_bug$pb001'),
-       (2, 'statistics$defects$automation_bug$ab001'),
+       (2, 'statistics$defects$test_bug$tb001'),
        (3, 'name'),
        (3, 'status'),
        (3, 'endTime'),
@@ -109,7 +109,7 @@ values (2, 'name'),
        (3, 'statistics$executions$skipped'),
        (3, 'statistics$executions$untested'),
        (3, 'statistics$defects$product_bug$pb001'),
-       (3, 'statistics$defects$automation_bug$ab001');
+       (3, 'statistics$defects$test_bug$tb001');
 
 insert into widget_filter(widget_id, filter_id)
 values (2, 1),

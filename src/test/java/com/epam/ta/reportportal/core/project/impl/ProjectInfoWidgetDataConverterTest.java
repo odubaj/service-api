@@ -138,12 +138,12 @@ class ProjectInfoWidgetDataConverterTest {
 		assertEquals("3", launchesIssues.get(yesterdayString).get(0).getValues().get("systemIssue"));
 		assertEquals("6", launchesIssues.get(yesterdayString).get(0).getValues().get("toInvestigate"));
 		assertEquals("2", launchesIssues.get(yesterdayString).get(0).getValues().get("productBug"));
-		assertEquals("3", launchesIssues.get(yesterdayString).get(0).getValues().get("automationBug"));
+		assertEquals("3", launchesIssues.get(yesterdayString).get(0).getValues().get("testBug"));
 
 		assertEquals("3", launchesIssues.get(todayString).get(0).getValues().get("systemIssue"));
 		assertEquals("8", launchesIssues.get(todayString).get(0).getValues().get("toInvestigate"));
 		assertEquals("1", launchesIssues.get(todayString).get(0).getValues().get("productBug"));
-		assertEquals("4", launchesIssues.get(todayString).get(0).getValues().get("automationBug"));
+		assertEquals("4", launchesIssues.get(todayString).get(0).getValues().get("testBug"));
 	}
 
 	@Test
@@ -153,7 +153,7 @@ class ProjectInfoWidgetDataConverterTest {
 		assertEquals("6", launchesIssues.get(thisWeekFormattedDate).get(0).getValues().get("systemIssue"));
 		assertEquals("14", launchesIssues.get(thisWeekFormattedDate).get(0).getValues().get("toInvestigate"));
 		assertEquals("3", launchesIssues.get(thisWeekFormattedDate).get(0).getValues().get("productBug"));
-		assertEquals("7", launchesIssues.get(thisWeekFormattedDate).get(0).getValues().get("automationBug"));
+		assertEquals("7", launchesIssues.get(thisWeekFormattedDate).get(0).getValues().get("testBug"));
 	}
 
 	private List<Launch> getTestData() {
@@ -167,7 +167,7 @@ class ProjectInfoWidgetDataConverterTest {
 				getStatistics(EXECUTIONS_SKIPPED, 1),
 				getStatistics(EXECUTIONS_UNTESTED, 2),
 				getStatistics(EXECUTIONS_FAILED, 12),
-				getStatistics(DEFECTS_AUTOMATION_BUG_TOTAL, 3),
+				getStatistics(DEFECTS_TEST_BUG_TOTAL, 3),
 				getStatistics(DEFECTS_PRODUCT_BUG_TOTAL, 2),
 				getStatistics(DEFECTS_SYSTEM_ISSUE_TOTAL, 3),
 				getStatistics(DEFECTS_TO_INVESTIGATE_TOTAL, 6)
@@ -182,7 +182,7 @@ class ProjectInfoWidgetDataConverterTest {
 				getStatistics(EXECUTIONS_SKIPPED, 2),
 				getStatistics(EXECUTIONS_UNTESTED, 3),
 				getStatistics(EXECUTIONS_FAILED, 13),
-				getStatistics(DEFECTS_AUTOMATION_BUG_TOTAL, 4),
+				getStatistics(DEFECTS_TEST_BUG_TOTAL, 4),
 				getStatistics(DEFECTS_PRODUCT_BUG_TOTAL, 1),
 				getStatistics(DEFECTS_SYSTEM_ISSUE_TOTAL, 3),
 				getStatistics(DEFECTS_TO_INVESTIGATE_TOTAL, 8)

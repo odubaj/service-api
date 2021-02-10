@@ -178,9 +178,9 @@
                                             <@subtypes sbt=pbInfo/>
                                         </#if>
 
-                                        <!-- AUTOMATION BUG bugs section -->
-                                        <#assign name="Automation Bugs">
-                                        <@maintype name="${name}" counter="${automationBugTotal}" />
+                                        <!-- TEST BUG bugs section -->
+                                        <#assign name="Test Bugs">
+                                        <@maintype name="${name}" counter="${testBugTotal}" />
                                         <#if abInfo??>
                                             <@subtypes sbt=abInfo/>
                                         </#if>
@@ -192,9 +192,9 @@
                                             <@subtypes sbt=siInfo/>
                                         </#if>
 
-                                        <!-- NO DEFECT bugs section -->
-                                        <#assign name="No Defects">
-                                        <@maintype name="${name}" counter="${noDefectTotal}" />
+                                        <!-- MINOR DEFECT bugs section -->
+                                        <#assign name="Minor Defects">
+                                        <@maintype name="${name}" counter="${minorDefectTotal}" />
                                         <#if ndInfo??>
                                             <@subtypes sbt=ndInfo/>
                                         </#if>

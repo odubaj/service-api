@@ -42,10 +42,10 @@ public class TestItemPojo {
 	private Integer untested;
 	private Integer failed;
 	private Integer skipped;
-	private Integer automationBug;
+	private Integer testBug;
 	private Integer productBug;
 	private Integer systemIssue;
-	private Integer noDefect;
+	private Integer minorDefect;
 	private Integer toInvestigate;
 
 	public TestItemPojo(TestItem input) {
@@ -71,10 +71,10 @@ public class TestItemPojo {
 		this.skipped = getStatisticsCounter(statistics, EXECUTIONS_SKIPPED);
 		this.untested = getStatisticsCounter(statistics, EXECUTIONS_UNTESTED);
 
-		this.automationBug = getStatisticsCounter(statistics, DEFECTS_AUTOMATION_BUG_TOTAL);
+		this.testBug = getStatisticsCounter(statistics, DEFECTS_TEST_BUG_TOTAL);
 		this.productBug = getStatisticsCounter(statistics, DEFECTS_PRODUCT_BUG_TOTAL);
 		this.systemIssue = getStatisticsCounter(statistics, DEFECTS_SYSTEM_ISSUE_TOTAL);
-		this.noDefect = getStatisticsCounter(statistics, DEFECTS_NO_DEFECT_TOTAL);
+		this.minorDefect = getStatisticsCounter(statistics, DEFECTS_MINOR_DEFECT_TOTAL);
 		this.toInvestigate = getStatisticsCounter(statistics, DEFECTS_TO_INVESTIGATE_TOTAL);
 	}
 
@@ -142,12 +142,12 @@ public class TestItemPojo {
 		return skipped;
 	}
 
-	public void setAutomationBug(Integer value) {
-		this.automationBug = value;
+	public void setTestBug(Integer value) {
+		this.testBug = value;
 	}
 
-	public Integer getAutomationBug() {
-		return automationBug;
+	public Integer getTestBug() {
+		return testBug;
 	}
 
 	public void setProductBug(Integer value) {
@@ -166,12 +166,12 @@ public class TestItemPojo {
 		return systemIssue;
 	}
 
-	public void setNoDefect(Integer value) {
-		this.noDefect = value;
+	public void setMinorDefect(Integer value) {
+		this.minorDefect = value;
 	}
 
-	public Integer getNoDefect() {
-		return noDefect;
+	public Integer getMinorDefect() {
+		return minorDefect;
 	}
 
 	public void setToInvestigate(Integer value) {
@@ -206,10 +206,10 @@ public class TestItemPojo {
 		sb.append(", failed=").append(failed);
 		sb.append(", skipped=").append(skipped);
 		sb.append(", untested=").append(untested);
-		sb.append(", automationBug=").append(automationBug);
+		sb.append(", testBug=").append(testBug);
 		sb.append(", productBug=").append(productBug);
 		sb.append(", systemIssue=").append(systemIssue);
-		sb.append(", noDefect=").append(noDefect);
+		sb.append(", minorDefect=").append(minorDefect);
 		sb.append(", toInvestigate=").append(toInvestigate);
 		sb.append('}');
 		return sb.toString();

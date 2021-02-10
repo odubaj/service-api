@@ -212,8 +212,8 @@ public class GetLaunchHandlerImpl implements GetLaunchHandler {
 	@Override
 	public Map<String, List<ChartStatisticsContent>> getLaunchesComparisonInfo(ReportPortalUser.ProjectDetails projectDetails, Long[] ids) {
 
-		List<String> contentFields = Lists.newArrayList(DEFECTS_AUTOMATION_BUG_TOTAL,
-				DEFECTS_NO_DEFECT_TOTAL,
+		List<String> contentFields = Lists.newArrayList(DEFECTS_TEST_BUG_TOTAL,
+				DEFECTS_MINOR_DEFECT_TOTAL,
 				DEFECTS_PRODUCT_BUG_TOTAL,
 				DEFECTS_SYSTEM_ISSUE_TOTAL,
 				DEFECTS_TO_INVESTIGATE_TOTAL,

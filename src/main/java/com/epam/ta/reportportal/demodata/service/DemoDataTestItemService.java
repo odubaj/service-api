@@ -123,7 +123,7 @@ public class DemoDataTestItemService {
 		if (ContentUtils.getWithProbability(ISSUE_PROBABILITY)) { // NOSONAR
 			return ContentUtils.getProductBug();
 		} else if (ContentUtils.getWithProbability(ISSUE_PROBABILITY)) { // NOSONAR
-			return ContentUtils.getAutomationBug();
+			return ContentUtils.getTestBug();
 		} else if (ContentUtils.getWithProbability(ISSUE_PROBABILITY)) { // NOSONAR
 			return ContentUtils.getSystemIssue();
 		} else {

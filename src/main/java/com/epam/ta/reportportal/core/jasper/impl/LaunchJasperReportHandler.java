@@ -88,10 +88,10 @@ public class LaunchJasperReportHandler extends AbstractJasperReportHandler<Launc
 		params.put(LaunchReportConstants.SKIPPED, ExportUtils.getStatisticsCounter(statistics, EXECUTIONS_SKIPPED));
 		params.put(LaunchReportConstants.UNTESTED, ExportUtils.getStatisticsCounter(statistics, EXECUTIONS_UNTESTED));
 
-		params.put(LaunchReportConstants.AB, ExportUtils.getStatisticsCounter(statistics, DEFECTS_AUTOMATION_BUG_TOTAL));
+		params.put(LaunchReportConstants.TB, ExportUtils.getStatisticsCounter(statistics, DEFECTS_TEST_BUG_TOTAL));
 		params.put(LaunchReportConstants.PB, ExportUtils.getStatisticsCounter(statistics, DEFECTS_PRODUCT_BUG_TOTAL));
 		params.put(LaunchReportConstants.SI, ExportUtils.getStatisticsCounter(statistics, DEFECTS_SYSTEM_ISSUE_TOTAL));
-		params.put(LaunchReportConstants.ND, ExportUtils.getStatisticsCounter(statistics, DEFECTS_NO_DEFECT_TOTAL));
+		params.put(LaunchReportConstants.MD, ExportUtils.getStatisticsCounter(statistics, DEFECTS_MINOR_DEFECT_TOTAL));
 		params.put(LaunchReportConstants.TI, ExportUtils.getStatisticsCounter(statistics, DEFECTS_TO_INVESTIGATE_TOTAL));
 
 		return params;

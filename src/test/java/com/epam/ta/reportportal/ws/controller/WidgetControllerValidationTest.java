@@ -241,7 +241,7 @@ class WidgetControllerValidationTest extends BaseMvcTest {
 		widgetRQ.setDescription("description");
 		widgetRQ.setWidgetType("oldLineChart");
 		ContentParameters contentParameters = new ContentParameters();
-		contentParameters.setContentFields(Arrays.asList("number", "name", "user", "statistics$defects$automation_bug$AB002"));
+		contentParameters.setContentFields(Arrays.asList("number", "name", "user", "statistics$defects$test_bug$TB002"));
 		contentParameters.setItemsCount(50);
 		widgetRQ.setContentParameters(contentParameters);
 		widgetRQ.setShare(true);

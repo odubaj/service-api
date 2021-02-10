@@ -74,7 +74,7 @@ class ProjectSettingsControllerTest extends BaseMvcTest {
 		final ProjectSettingsResource projectSettingsResource = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
 				ProjectSettingsResource.class
 		);
-		assertEquals(8,
+		assertEquals(10,
 				projectSettingsResource.getSubTypes().values().stream().flatMap(Collection::stream).collect(Collectors.toList()).size()
 		);
 	}

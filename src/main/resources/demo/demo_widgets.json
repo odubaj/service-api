@@ -11,7 +11,7 @@
         "statistics$executions$failed",
         "statistics$executions$skipped",
         "statistics$defects$product_bug$pb001",
-        "statistics$defects$automation_bug$ab001",
+        "statistics$defects$test_bug$tb001",
         "statistics$defects$system_issue$si001",
         "statistics$defects$to_investigate$ti001"
       ],
@@ -78,7 +78,7 @@
         "statistics$executions$failed",
         "statistics$executions$skipped",
         "statistics$defects$product_bug$pb001",
-        "statistics$defects$automation_bug$ab001",
+        "statistics$defects$test_bug$tb001",
         "statistics$defects$system_issue$si001",
         "statistics$defects$to_investigate$ti001"
       ],
@@ -113,7 +113,7 @@
         "statistics$executions$failed",
         "statistics$executions$skipped",
         "statistics$defects$product_bug$pb001",
-        "statistics$defects$automation_bug$ab001",
+        "statistics$defects$test_bug$tb001",
         "statistics$defects$system_issue$si001",
         "statistics$defects$to_investigate$ti001"
       ],
@@ -132,9 +132,9 @@
       "contentFields": [
         "statistics$defects$to_investigate$total",
         "statistics$defects$product_bug$total",
-        "statistics$defects$automation_bug$total",
+        "statistics$defects$test_bug$total",
         "statistics$defects$system_issue$total",
-        "statistics$defects$no_defect$total"
+        "statistics$defects$minor_defect$total"
       ],
       "widgetOptions": {
       }
@@ -161,7 +161,7 @@
         "statistics$executions$failed",
         "statistics$executions$skipped",
         "statistics$defects$product_bug$pb001",
-        "statistics$defects$automation_bug$ab001",
+        "statistics$defects$test_bug$tb001",
         "statistics$defects$system_issue$si001",
         "statistics$defects$to_investigate$ti001"
       ],

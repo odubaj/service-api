@@ -83,12 +83,12 @@ public class ContentFieldMatcherUtilTest {
 
 	private List<String> buildCorrectDefectContentFields() {
 		return Lists.newArrayList(
-				"statistics$defects$automation_bug$AB001",
+				"statistics$defects$test_bug$TB001",
 				"statistics$defects$product_bug$PB001",
 				"statistics$defects$to_investigate$TI001",
 				"statistics$defects$system_issue$SI001",
-				"statistics$defects$no_defect$ND001",
-				"statistics$defects$no_defect$total",
+				"statistics$defects$minor_defect$MD001",
+				"statistics$defects$minor_defect$total",
 				"statistics$defects$product_bug$total",
 				"statistics$defects$to_investigate$total",
 				"statistics$defects$system_issue$total"
@@ -132,12 +132,12 @@ public class ContentFieldMatcherUtilTest {
 				"statistics$executions$failed",
 				"statistics$executions$skipped",
 				"statistics$executions$total",
-				"statistics$defects$automation_bug$AB001",
+				"statistics$defects$test_bug$TB001",
 				"statistics$defects$product_bug$PB001",
 				"statistics$defects$to_investigate$TI001",
 				"statistics$defects$system_issue$SI001",
-				"statistics$defects$no_defect$ND001",
-				"statistics$defects$no_defect$total"
+				"statistics$defects$minor_defect$MD001",
+				"statistics$defects$minor_defect$total"
 		);
 	}
 

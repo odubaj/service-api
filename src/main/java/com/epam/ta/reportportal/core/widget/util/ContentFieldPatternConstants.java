@@ -55,12 +55,12 @@ public final class ContentFieldPatternConstants {
 	public static final String EXECUTIONS_REGEX;
 
 	/*
-		^statistics\\$defects\\$(automation_bug|product_bug|no_defect|system_issue|to_investigate)\\$[\\w\\d]+$
+		^statistics\\$defects\\$(test_bug|product_bug|minor_defect|system_issue|to_investigate)\\$[\\w\\d]+$
 	 */
 	public static final String DEFECTS_REGEX;
 
 	/*
-		((^statistics\\$defects\\$(automation_bug|product_bug|no_defect|system_issue|to_investigate)\\$[\\w\\d]+$)|(^statistics\\$executions\\$(passed|failed|skipped|untested|total)$))
+		((^statistics\\$defects\\$(test_bug|product_bug|minor_defect|system_issue|to_investigate)\\$[\\w\\d]+$)|(^statistics\\$executions\\$(passed|failed|skipped|untested|total)$))
 	 */
 	public static final String COMBINED_CONTENT_FIELDS_REGEX = "(" + DEFECTS_REGEX + ")" + "|" + "(" + EXECUTIONS_REGEX + ")";
 

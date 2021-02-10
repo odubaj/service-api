@@ -157,9 +157,9 @@ public class EmailService extends JavaMailSenderImpl {
 
 		/* Launch issue statistics global counters */
 		email.put("productBugTotal", ofNullable(statistics.get(DEFECTS_PRODUCT_BUG_TOTAL)).orElse(0));
-		email.put("automationBugTotal", ofNullable(statistics.get(DEFECTS_AUTOMATION_BUG_TOTAL)).orElse(0));
+		email.put("testBugTotal", ofNullable(statistics.get(DEFECTS_TEST_BUG_TOTAL)).orElse(0));
 		email.put("systemIssueTotal", ofNullable(statistics.get(DEFECTS_SYSTEM_ISSUE_TOTAL)).orElse(0));
-		email.put("noDefectTotal", ofNullable(statistics.get(DEFECTS_NO_DEFECT_TOTAL)).orElse(0));
+		email.put("minorDefectTotal", ofNullable(statistics.get(DEFECTS_MINOR_DEFECT_TOTAL)).orElse(0));
 		email.put("toInvestigateTotal", ofNullable(statistics.get(DEFECTS_TO_INVESTIGATE_TOTAL)).orElse(0));
 
 		Map<String, String> locatorsMapping = projectIssueTypes.stream()
@@ -167,9 +167,9 @@ public class EmailService extends JavaMailSenderImpl {
 
 		/* Launch issue statistics custom sub-types */
 		fillEmail(email, "pbInfo", statistics, locatorsMapping, IssueRegexConstant.PRODUCT_BUG_ISSUE_REGEX);
-		fillEmail(email, "abInfo", statistics, locatorsMapping, IssueRegexConstant.AUTOMATION_BUG_ISSUE_REGEX);
+		fillEmail(email, "tbInfo", statistics, locatorsMapping, IssueRegexConstant.TEST_BUG_ISSUE_REGEX);
 		fillEmail(email, "siInfo", statistics, locatorsMapping, IssueRegexConstant.SYSTEM_ISSUE_REGEX);
-		fillEmail(email, "ndInfo", statistics, locatorsMapping, IssueRegexConstant.NO_DEFECT_ISSUE_REGEX);
+		fillEmail(email, "mdInfo", statistics, locatorsMapping, IssueRegexConstant.MINOR_DEFECT_ISSUE_REGEX);
 		fillEmail(email, "tiInfo", statistics, locatorsMapping, IssueRegexConstant.TO_INVESTIGATE_ISSUE_REGEX);
 
 		return templateEngine.merge("finish-launch-template.ftl", email);

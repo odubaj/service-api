@@ -148,10 +148,10 @@ public class UpdateProjectSettingsHandlerImpl implements UpdateProjectSettingsHa
 		);
 
 		expect(exist.getLocator(),
-				not(in(Sets.newHashSet(AUTOMATION_BUG.getLocator(),
+				not(in(Sets.newHashSet(TEST_BUG.getLocator(),
 						PRODUCT_BUG.getLocator(),
 						SYSTEM_ISSUE.getLocator(),
-						NO_DEFECT.getLocator(),
+						MINOR_DEFECT.getLocator(),
 						TO_INVESTIGATE.getLocator()
 				)))
 		).verify(FORBIDDEN_OPERATION, "You cannot remove predefined global issue types.");

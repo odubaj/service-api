@@ -127,7 +127,7 @@ VALUES (2, 'bug trend', null, 'bugTrend', 20, '{"options": {}}');
 
 insert into content_field(id, field)
 values (2, 'statistics$defects$product_bug$total'),
-       (2, 'statistics$defects$automation_bug$total'),
+       (2, 'statistics$defects$test_bug$total'),
        (2, 'statistics$defects$system_issue$total'),
        (2, 'statistics$defects$to_investigate$total');
 

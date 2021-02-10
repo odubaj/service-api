@@ -97,7 +97,7 @@
     "ItemIssuesEditingTest": [
       "testDefineIssueWithCommentLengthExceedsMax",
       "testDefineIssueProductBug",
-      "testDefineIssueAutomationBug",
+      "testDefineIssueTestBug",
       "testDefineIssueToInvestigate",
       "testDefineIssueSystemIssue"
     ]

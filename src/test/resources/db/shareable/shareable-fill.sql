@@ -54,9 +54,9 @@ INSERT INTO public.widget (id, name, description, widget_type, items_count, widg
 insert into content_field(id, field)
 values (10, 'statistics$defects$to_investigate$total'),
        (10, 'statistics$defects$product_bug$total'),
-       (10, 'statistics$defects$automation_bug$total'),
+       (10, 'statistics$defects$test_bug$total'),
        (10, 'statistics$defects$system_issue$total'),
-       (10, 'statistics$defects$no_defect$total');
+       (10, 'statistics$defects$minor_defect$total');
 
 INSERT INTO public.widget_filter (widget_id, filter_id) VALUES
 (6, 1),

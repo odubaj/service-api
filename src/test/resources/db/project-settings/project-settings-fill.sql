@@ -1,12 +1,12 @@
 insert into issue_type (id, issue_group_id, locator, issue_name, abbreviation, hex_color)
-values (6, 1, 'custom_ti', 'Custom to investigate', 'CTI', '#2f39bf'),
-       (7, 2, 'custom_ab', 'Custom automation bug', 'CAB', '#ccac39'),
-       (8, 5, 'custom si', 'Custom system issue', 'CSI', '#08af2a');
+values (8, 1, 'custom_ti', 'Custom to investigate', 'CTI', '#2f39bf'),
+       (9, 2, 'custom_ab', 'Custom automation bug', 'CAB', '#ccac39'),
+       (10, 5, 'custom si', 'Custom system issue', 'CSI', '#08af2a');
 
 insert into issue_type_project(project_id, issue_type_id)
-values (2, 6),
-       (2, 7),
-       (2, 8);
+values (2, 8),
+       (2, 9),
+       (2, 10);
 
 INSERT INTO public.shareable_entity (id, shared, owner, project_id)
 VALUES (1, false, 'default', 2),
@@ -34,7 +34,7 @@ values (2, 'statistics$executions$total'),
        (2, 'statistics$executions$skipped'),
        (2, 'statistics$executions$untested'),
        (2, 'statistics$defects$product_bug$pb001'),
-       (2, 'statistics$defects$automation_bug$ab001'),
+       (2, 'statistics$defects$test_bug$tb001'),
        (2, 'statistics$defects$to_investigate$ti001'),
        (3, 'name'),
        (3, 'status'),
@@ -50,7 +50,7 @@ values (2, 'statistics$executions$total'),
        (3, 'statistics$executions$skipped'),
        (3, 'statistics$executions$untested'),
        (3, 'statistics$defects$product_bug$pb001'),
-       (3, 'statistics$defects$automation_bug$ab001'),
+       (3, 'statistics$defects$test_bug$tb001'),
        (3, 'statistics$defects$to_investigate$custom_ti');
 
 
@@ -58,7 +58,7 @@ insert into widget_filter(widget_id, filter_id)
 values (2, 1),
        (3, 1);
 
-alter sequence issue_type_id_seq restart with 9;
+alter sequence issue_type_id_seq restart with 11;
 
 insert into pattern_template(id, name, "value", type, enabled, project_id)
 values (1, 'some_name', 'value', 'STRING', true, 2),

@@ -148,9 +148,9 @@ public class LaunchNotificationSubscriber implements LaunchFinishedEventSubscrib
 		double ti = extractStatisticsCount(DEFECTS_TO_INVESTIGATE_TOTAL, launch.getStatistics()).doubleValue();
 		double pb = extractStatisticsCount(DEFECTS_PRODUCT_BUG_TOTAL, launch.getStatistics()).doubleValue();
 		double si = extractStatisticsCount(DEFECTS_SYSTEM_ISSUE_TOTAL, launch.getStatistics()).doubleValue();
-		double ab = extractStatisticsCount(DEFECTS_AUTOMATION_BUG_TOTAL, launch.getStatistics()).doubleValue();
+		double tb = extractStatisticsCount(DEFECTS_TEST_BUG_TOTAL, launch.getStatistics()).doubleValue();
 		double total = extractStatisticsCount(EXECUTIONS_TOTAL, launch.getStatistics()).doubleValue();
-		return total == 0 ? total : (ti + pb + si + ab) / total;
+		return total == 0 ? total : (ti + pb + si + tb) / total;
 	}
 
 	/**

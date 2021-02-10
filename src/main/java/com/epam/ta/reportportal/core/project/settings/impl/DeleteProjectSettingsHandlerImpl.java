@@ -102,10 +102,10 @@ public class DeleteProjectSettingsHandlerImpl implements DeleteProjectSettingsHa
 				.orElseThrow(() -> new ReportPortalException(ISSUE_TYPE_NOT_FOUND, id));
 
 		expect(type.getIssueType().getLocator(),
-				not(in(Sets.newHashSet(AUTOMATION_BUG.getLocator(),
+				not(in(Sets.newHashSet(TEST_BUG.getLocator(),
 						PRODUCT_BUG.getLocator(),
 						SYSTEM_ISSUE.getLocator(),
-						NO_DEFECT.getLocator(),
+						MINOR_DEFECT.getLocator(),
 						TO_INVESTIGATE.getLocator()
 				)))
 		).verify(FORBIDDEN_OPERATION, "You cannot remove predefined global issue types.");

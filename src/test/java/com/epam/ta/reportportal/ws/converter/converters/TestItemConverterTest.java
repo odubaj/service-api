@@ -187,7 +187,7 @@ class TestItemConverterTest {
 			issue.setTickets(Sets.newHashSet(ticket, ticket1));
 			itemResults.setIssue(issue);
 		}
-		itemResults.setStatistics(Sets.newHashSet(new Statistics(new StatisticsField("statistics$defects$automation_bug$total"), 1, 2L)));
+		itemResults.setStatistics(Sets.newHashSet(new Statistics(new StatisticsField("statistics$defects$test_bug$total"), 1, 2L)));
 		item.setItemResults(itemResults);
 		return item;
 	}

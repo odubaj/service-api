@@ -93,7 +93,7 @@ class ProjectControllerTest extends BaseMvcTest {
 		final Optional<Project> createdProjectOptional = projectRepository.findByName("TestProject".toLowerCase());
 		assertTrue(createdProjectOptional.isPresent());
 		assertEquals(11, createdProjectOptional.get().getProjectAttributes().size());
-		assertEquals(5, createdProjectOptional.get().getProjectIssueTypes().size());
+		assertEquals(7, createdProjectOptional.get().getProjectIssueTypes().size());
 	}
 
 	@Test

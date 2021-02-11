@@ -65,13 +65,13 @@ dependencies {
         compile 'com.epam.reportportal:commons-fonts'
         compile 'com.epam.reportportal:plugin-api'
     } else {
-        compile 'com.github.odubaj:commons-dao:0cd6e551'
+        compile 'com.github.odubaj:commons-dao:dc2651e9'
         //compile fileTree(dir: '/home/odubaj/DIPLOMKA/commons-dao/build/libs', include: ['*.jar'])
         compile 'com.github.odubaj:commons-rules:e5d0d8f'
         compile 'com.github.odubaj:commons-model:2a2f927'
         compile 'com.github.reportportal:commons:22bb0294'
         compile 'com.github.reportportal:commons-fonts:7f26d06'
-        compile 'com.github.odubaj:plugin-api:b644560e'
+        compile 'com.github.odubaj:plugin-api:fe12e073'
     }
 
     compile 'org.springframework.boot:spring-boot-starter-aop'

@@ -107,6 +107,6 @@ class StatisticsHelperTest {
 	@Test
 	void defaultStatisticsFields() {
 		List<String> fields = StatisticsHelper.defaultStatisticsFields().collect(Collectors.toList());
-		assertEquals(10, fields.size());
+		assertEquals(12, fields.size());
 	}
 }

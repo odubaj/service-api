@@ -114,6 +114,7 @@ public class DemoDataLaunchService {
 				StatusEnum.PASSED.name(),
 				StatusEnum.INFO.name(),
 				StatusEnum.WARN.name(),
+				StatusEnum.RUNNING.name(),
 				StatusEnum.UNTESTED.name()
 		)) {
 			fromStatisticsStatus = StatusEnum.FAILED;

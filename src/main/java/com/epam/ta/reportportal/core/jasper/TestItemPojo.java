@@ -40,6 +40,7 @@ public class TestItemPojo {
 	private Integer total;
 	private Integer passed;
 	private Integer untested;
+	private Integer running;
 	private Integer failed;
 	private Integer skipped;
 	private Integer testBug;
@@ -70,6 +71,7 @@ public class TestItemPojo {
 		this.failed = getStatisticsCounter(statistics, EXECUTIONS_FAILED);
 		this.skipped = getStatisticsCounter(statistics, EXECUTIONS_SKIPPED);
 		this.untested = getStatisticsCounter(statistics, EXECUTIONS_UNTESTED);
+		this.running = getStatisticsCounter(statistics, EXECUTIONS_RUNNING);
 
 		this.testBug = getStatisticsCounter(statistics, DEFECTS_TEST_BUG_TOTAL);
 		this.productBug = getStatisticsCounter(statistics, DEFECTS_PRODUCT_BUG_TOTAL);
@@ -124,6 +126,14 @@ public class TestItemPojo {
 
 	public Integer getUntested() {
 		return untested;
+	}
+
+	public void setRunning(Integer value) {
+		this.running = value;
+	}
+
+	public Integer getRunning() {
+		return running;
 	}
 
 	public void setFailed(Integer value) {
@@ -190,10 +200,6 @@ public class TestItemPojo {
 		this.duration = duration;
 	}
 
-	public void setPassed(Integer passed) {
-		this.passed = passed;
-	}
-
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("TestItemPojo{");
@@ -206,6 +212,7 @@ public class TestItemPojo {
 		sb.append(", failed=").append(failed);
 		sb.append(", skipped=").append(skipped);
 		sb.append(", untested=").append(untested);
+		sb.append(", running=").append(running);
 		sb.append(", testBug=").append(testBug);
 		sb.append(", productBug=").append(productBug);
 		sb.append(", systemIssue=").append(systemIssue);

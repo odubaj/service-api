@@ -220,6 +220,7 @@ public class GetLaunchHandlerImpl implements GetLaunchHandler {
 				EXECUTIONS_FAILED,
 				EXECUTIONS_PASSED,
 				EXECUTIONS_UNTESTED,
+				EXECUTIONS_RUNNING,
 				EXECUTIONS_SKIPPED
 		);
 

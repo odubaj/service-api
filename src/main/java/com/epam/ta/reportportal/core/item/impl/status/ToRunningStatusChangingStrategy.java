@@ -20,15 +20,10 @@ import com.epam.ta.reportportal.commons.ReportPortalUser;
 import com.epam.ta.reportportal.commons.validation.BusinessRule;
 import com.epam.ta.reportportal.commons.validation.Suppliers;
 import com.epam.ta.reportportal.core.analyzer.auto.LogIndexer;
-import com.epam.ta.reportportal.core.analyzer.auto.impl.AnalyzerUtils;
 import com.epam.ta.reportportal.core.events.MessageBus;
 import com.epam.ta.reportportal.core.item.TestItemService;
 import com.epam.ta.reportportal.core.item.impl.IssueTypeHandler;
-import com.epam.ta.reportportal.dao.IssueEntityRepository;
-import com.epam.ta.reportportal.dao.LaunchRepository;
-import com.epam.ta.reportportal.dao.LogRepository;
-import com.epam.ta.reportportal.dao.ProjectRepository;
-import com.epam.ta.reportportal.dao.TestItemRepository;
+import com.epam.ta.reportportal.dao.*;
 import com.epam.ta.reportportal.entity.enums.LogLevel;
 import com.epam.ta.reportportal.entity.enums.StatusEnum;
 import com.epam.ta.reportportal.entity.item.TestItem;
@@ -37,8 +32,10 @@ import com.epam.ta.reportportal.entity.project.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.epam.ta.reportportal.commons.Preconditions.statusIn;
 import static com.epam.ta.reportportal.ws.model.ErrorType.INCORRECT_REQUEST;
@@ -49,12 +46,12 @@ import static java.util.Optional.ofNullable;
  * @author <a href="mailto:ihar_kahadouski@epam.com">Ihar Kahadouski</a>
  */
 @Service
-public class ToUntestedStatusChangingStrategy extends AbstractStatusChangingStrategy {
+public class ToRunningStatusChangingStrategy extends AbstractStatusChangingStrategy {
 
 	private final TestItemRepository testItemRepository;
 
 	@Autowired
-	public ToUntestedStatusChangingStrategy(TestItemService testItemService, ProjectRepository projectRepository,
+	protected ToRunningStatusChangingStrategy(TestItemService testItemService, ProjectRepository projectRepository,
 			LaunchRepository launchRepository, IssueTypeHandler issueTypeHandler, MessageBus messageBus,
 			IssueEntityRepository issueEntityRepository, LogRepository logRepository, LogIndexer logIndexer,
 			TestItemRepository testItemRepository) {
@@ -72,50 +69,35 @@ public class ToUntestedStatusChangingStrategy extends AbstractStatusChangingStra
 
 	@Override
 	protected void updateStatus(Project project, Launch launch, TestItem testItem, StatusEnum providedStatus, ReportPortalUser user) {
-		BusinessRule.expect(providedStatus, statusIn(StatusEnum.UNTESTED))
+		BusinessRule.expect(providedStatus, statusIn(StatusEnum.RUNNING))
 				.verify(INCORRECT_REQUEST,
-						Suppliers.formattedSupplier("Incorrect status - '{}', only '{}' is allowed", providedStatus, StatusEnum.UNTESTED)
-								.get()
+						Suppliers.formattedSupplier("Incorrect status - '{}', only '{}' are allowed",
+								providedStatus,
+								StatusEnum.RUNNING
+						).get()
 				);
 
 		testItem.getItemResults().setStatus(providedStatus);
 		if (Objects.isNull(testItem.getRetryOf())) {
-            ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {
+			ofNullable(testItem.getItemResults().getIssue()).ifPresent(issue -> {
+				issue.setTestItemResults(null);
 				issueEntityRepository.delete(issue);
+				testItem.getItemResults().setIssue(null);
+				logIndexer.cleanIndex(project.getId(),
+						logRepository.findIdsUnderTestItemByLaunchIdAndTestItemIdsAndLogLevelGte(testItem.getLaunchId(),
+								Collections.singletonList(testItem.getItemId()),
+								LogLevel.ERROR.toInt()
+						)
+				);
 			});
-			addToInvestigateIssue(testItem, project.getId());
 
-			List<Long> itemsToReindex = changeParentsStatuses(testItem, launch, true, user);
-			itemsToReindex.add(testItem.getItemId());
-			logIndexer.cleanIndex(project.getId(),
-					logRepository.findIdsUnderTestItemByLaunchIdAndTestItemIdsAndLogLevelGte(testItem.getLaunchId(),
-							itemsToReindex,
-							LogLevel.ERROR.toInt()
-					)
-			);
-			logIndexer.indexItemsLogs(project.getId(), launch.getId(), itemsToReindex, AnalyzerUtils.getAnalyzerConfig(project));
+			changeParentsStatuses(testItem, launch, false, user);
 		}
 	}
-
-	// @Override
-	// protected StatusEnum evaluateParentItemStatus(TestItem parentItem, TestItem childItem) {
-	// 	return StatusEnum.FAILED;
-	// }
 
 	@Override
 	protected StatusEnum evaluateParentItemStatus(TestItem parentItem, TestItem childItem) {
 		return testItemRepository.hasDescendantsNotInStatusExcludingById(parentItem.getItemId(),
-				childItem.getItemId(),
-				StatusEnum.UNTESTED.name(),
-				StatusEnum.PASSED.name(),
-				StatusEnum.SKIPPED.name(),
-				StatusEnum.INFO.name(),
-				StatusEnum.WARN.name()
-		) ? resolveNonUntestedStatus(parentItem, childItem) : StatusEnum.UNTESTED;
-	}
-
-	protected StatusEnum resolveNonUntestedStatus(TestItem parentItem, TestItem childItem) {
-		if(testItemRepository.hasDescendantsNotInStatusExcludingById(parentItem.getItemId(),
 				childItem.getItemId(),
 				StatusEnum.RUNNING.name(),
 				StatusEnum.UNTESTED.name(),
@@ -123,10 +105,7 @@ public class ToUntestedStatusChangingStrategy extends AbstractStatusChangingStra
 				StatusEnum.INFO.name(),
 				StatusEnum.SKIPPED.name(),
 				StatusEnum.WARN.name()
-		)) {
-			return StatusEnum.FAILED;
-		} else {
-			return StatusEnum.RUNNING;
-		}
+		) ? StatusEnum.FAILED : StatusEnum.RUNNING;
 	}
+
 }

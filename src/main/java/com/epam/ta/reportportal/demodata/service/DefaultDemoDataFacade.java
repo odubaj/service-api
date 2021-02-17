@@ -218,7 +218,9 @@ public class DefaultDemoDataFacade implements DemoDataFacade {
 
 	private StatusEnum status() {
 		int STATUS_PROBABILITY = 15;
-		if (ContentUtils.getWithProbability(STATUS_PROBABILITY / 2)) {
+		if (ContentUtils.getWithProbability(STATUS_PROBABILITY / 4)) {
+			return RUNNING;
+		} else if (ContentUtils.getWithProbability(STATUS_PROBABILITY / 2)) {
 			return UNTESTED;
 		} else if (ContentUtils.getWithProbability(STATUS_PROBABILITY)) {
 			return SKIPPED;

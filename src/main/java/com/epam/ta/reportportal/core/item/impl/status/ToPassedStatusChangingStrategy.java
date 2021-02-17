@@ -103,8 +103,36 @@ public class ToPassedStatusChangingStrategy extends AbstractStatusChangingStrate
 				childItem.getItemId(),
 				StatusEnum.PASSED.name(),
 				StatusEnum.INFO.name(),
+				StatusEnum.SKIPPED.name(),
 				StatusEnum.WARN.name()
-		) ? StatusEnum.FAILED : StatusEnum.PASSED;
+		) ? resolveNonPassedStatus(parentItem, childItem) : StatusEnum.PASSED;
+	}
+
+	protected StatusEnum resolveNonPassedStatus(TestItem parentItem, TestItem childItem) {
+		if(testItemRepository.hasDescendantsNotInStatusExcludingById(parentItem.getItemId(),
+				childItem.getItemId(),
+				StatusEnum.RUNNING.name(),
+				StatusEnum.UNTESTED.name(),
+				StatusEnum.PASSED.name(),
+				StatusEnum.INFO.name(),
+				StatusEnum.SKIPPED.name(),
+				StatusEnum.WARN.name()
+		)) {
+			return StatusEnum.FAILED;
+		} else {
+			if(testItemRepository.hasDescendantsNotInStatusExcludingById(parentItem.getItemId(),
+				childItem.getItemId(),
+				StatusEnum.UNTESTED.name(),
+				StatusEnum.PASSED.name(),
+				StatusEnum.INFO.name(),
+				StatusEnum.SKIPPED.name(),
+				StatusEnum.WARN.name()
+			)) {
+				return StatusEnum.RUNNING;
+			} else {
+				return StatusEnum.UNTESTED;
+			}
+		}
 	}
 
 }

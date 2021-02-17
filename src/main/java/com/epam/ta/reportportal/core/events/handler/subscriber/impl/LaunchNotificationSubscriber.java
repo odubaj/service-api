@@ -166,6 +166,8 @@ public class LaunchNotificationSubscriber implements LaunchFinishedEventSubscrib
 				return launch.getStatus().equals(StatusEnum.FAILED);
 			case UNTESTED:
 				return launch.getStatus().equals(StatusEnum.UNTESTED);
+			case RUNNING:
+				return launch.getStatus().equals(StatusEnum.RUNNING);
 			case TO_INVESTIGATE:
 				return extractStatisticsCount(DEFECTS_TO_INVESTIGATE_TOTAL, launch.getStatistics()) > 0;
 			case MORE_10:

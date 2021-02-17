@@ -111,9 +111,9 @@ class ProjectInfoWidgetDataConverterTest {
 	void getTestCasesStatisticsProjectInfo() {
 		Map<String, List<ChartObject>> testCasesStatisticsProjectInfo = converter.getTestCasesStatisticsProjectInfo(getTestData());
 
-		assertEquals("20.0", testCasesStatisticsProjectInfo.get("test_launch").get(0).getValues().get("min"));
+		assertEquals("21.0", testCasesStatisticsProjectInfo.get("test_launch").get(0).getValues().get("min"));
 		//assertEquals("22.0", testCasesStatisticsProjectInfo.get("test_launch").get(0).getValues().get("avg"));
-		assertEquals("24.0", testCasesStatisticsProjectInfo.get("test_launch").get(0).getValues().get("max"));
+		assertEquals("25.0", testCasesStatisticsProjectInfo.get("test_launch").get(0).getValues().get("max"));
 	}
 
 	@Test
@@ -162,10 +162,11 @@ class ProjectInfoWidgetDataConverterTest {
 		launch1.setId(1L);
 		launch1.setNumber(1L);
 		launch1.setStartTime(LocalDateTime.of(yesterday, LocalTime.now(ZoneOffset.UTC)));
-		launch1.setStatistics(Sets.newHashSet(getStatistics(EXECUTIONS_TOTAL, 20),
+		launch1.setStatistics(Sets.newHashSet(getStatistics(EXECUTIONS_TOTAL, 21),
 				getStatistics(EXECUTIONS_PASSED, 5),
 				getStatistics(EXECUTIONS_SKIPPED, 1),
 				getStatistics(EXECUTIONS_UNTESTED, 2),
+				getStatistics(EXECUTIONS_RUNNING, 1),
 				getStatistics(EXECUTIONS_FAILED, 12),
 				getStatistics(DEFECTS_TEST_BUG_TOTAL, 3),
 				getStatistics(DEFECTS_PRODUCT_BUG_TOTAL, 2),
@@ -177,10 +178,11 @@ class ProjectInfoWidgetDataConverterTest {
 		launch2.setId(2L);
 		launch2.setNumber(2L);
 		launch2.setStartTime(LocalDateTime.of(today, LocalTime.now(ZoneOffset.UTC)));
-		launch2.setStatistics(Sets.newHashSet(getStatistics(EXECUTIONS_TOTAL, 24),
+		launch2.setStatistics(Sets.newHashSet(getStatistics(EXECUTIONS_TOTAL, 25),
 				getStatistics(EXECUTIONS_PASSED, 6),
 				getStatistics(EXECUTIONS_SKIPPED, 2),
 				getStatistics(EXECUTIONS_UNTESTED, 3),
+				getStatistics(EXECUTIONS_RUNNING, 1),
 				getStatistics(EXECUTIONS_FAILED, 13),
 				getStatistics(DEFECTS_TEST_BUG_TOTAL, 4),
 				getStatistics(DEFECTS_PRODUCT_BUG_TOTAL, 1),

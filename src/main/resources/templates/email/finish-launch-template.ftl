@@ -153,6 +153,12 @@
                                             </td>
                                             <td width="40" style="font-size: 14px; color: #464547; border-width: 0px;">${untested}</td>
                                         </tr>
+                                        <tr bgcolor="#f9f9f9" style="background: #f9f9f9;">
+                                            <td height="25" style="font-size: 14px; color: #464547; padding-left: 38px; border-width: 0px;">
+                                                Running
+                                            </td>
+                                            <td width="40" style="font-size: 14px; color: #464547; border-width: 0px;">${running}</td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </td>

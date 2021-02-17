@@ -35,6 +35,7 @@ public final class LaunchReportConstants {
 	public final static String FAILED = "FAILED";
 	public final static String SKIPPED = "SKIPPED";
 	public final static String UNTESTED = "UNTESTED";
+	public final static String RUNNING = "RUNNING";
 	public final static String TB = "TB";
 	public final static String PB = "PB";
 	public final static String SI = "SI";

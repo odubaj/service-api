@@ -25,6 +25,7 @@ import com.epam.ta.reportportal.core.events.MessageBus;
 import com.epam.ta.reportportal.core.item.TestItemService;
 import com.epam.ta.reportportal.core.item.impl.IssueTypeHandler;
 import com.epam.ta.reportportal.dao.*;
+import com.epam.ta.reportportal.dao.TestItemRepository;
 import com.epam.ta.reportportal.entity.ItemAttribute;
 import com.epam.ta.reportportal.entity.enums.LogLevel;
 import com.epam.ta.reportportal.entity.enums.StatusEnum;
@@ -55,11 +56,13 @@ public class ToSkippedStatusChangingStrategy extends AbstractStatusChangingStrat
 
 	private final ItemAttributeRepository itemAttributeRepository;
 
+	private final TestItemRepository testItemRepository;
+
 	@Autowired
 	protected ToSkippedStatusChangingStrategy(TestItemService testItemService, ProjectRepository projectRepository,
 			LaunchRepository launchRepository, IssueTypeHandler issueTypeHandler, MessageBus messageBus,
 			IssueEntityRepository issueEntityRepository, LogRepository logRepository, LogIndexer logIndexer,
-			ItemAttributeRepository itemAttributeRepository) {
+			ItemAttributeRepository itemAttributeRepository, TestItemRepository testItemRepository) {
 		super(testItemService,
 				projectRepository,
 				launchRepository,
@@ -70,6 +73,7 @@ public class ToSkippedStatusChangingStrategy extends AbstractStatusChangingStrat
 				logIndexer
 		);
 		this.itemAttributeRepository = itemAttributeRepository;
+		this.testItemRepository = testItemRepository;
 	}
 
 	@Override
@@ -119,8 +123,53 @@ public class ToSkippedStatusChangingStrategy extends AbstractStatusChangingStrat
 		}
 	}
 
+	// @Override
+	// protected StatusEnum evaluateParentItemStatus(TestItem parentItem, TestItem childItem) {
+	// 	return FAILED;
+	// }
+
 	@Override
 	protected StatusEnum evaluateParentItemStatus(TestItem parentItem, TestItem childItem) {
-		return FAILED;
+		return testItemRepository.hasDescendantsNotInStatusExcludingById(parentItem.getItemId(),
+				childItem.getItemId(),
+				StatusEnum.SKIPPED.name()
+		) ? resolveNonSkippedStatus(parentItem, childItem) : StatusEnum.SKIPPED;
+	}
+
+	protected StatusEnum resolveNonSkippedStatus(TestItem parentItem, TestItem childItem) {
+		if(testItemRepository.hasDescendantsNotInStatusExcludingById(parentItem.getItemId(),
+				childItem.getItemId(),
+				StatusEnum.RUNNING.name(),
+				StatusEnum.UNTESTED.name(),
+				StatusEnum.PASSED.name(),
+				StatusEnum.INFO.name(),
+				StatusEnum.SKIPPED.name(),
+				StatusEnum.WARN.name()
+		)) {
+			return StatusEnum.FAILED;
+		} else {
+			if(testItemRepository.hasDescendantsNotInStatusExcludingById(parentItem.getItemId(),
+				childItem.getItemId(),
+				StatusEnum.UNTESTED.name(),
+				StatusEnum.PASSED.name(),
+				StatusEnum.INFO.name(),
+				StatusEnum.SKIPPED.name(),
+				StatusEnum.WARN.name()
+			)) {
+				return StatusEnum.RUNNING;
+			} else {
+				if(testItemRepository.hasDescendantsNotInStatusExcludingById(parentItem.getItemId(),
+					childItem.getItemId(),
+					StatusEnum.PASSED.name(),
+					StatusEnum.INFO.name(),
+					StatusEnum.SKIPPED.name(),
+					StatusEnum.WARN.name()
+				)) {
+					return StatusEnum.UNTESTED;
+				} else {
+					return StatusEnum.PASSED;
+				}
+			}
+		}
 	}
 }

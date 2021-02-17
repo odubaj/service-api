@@ -41,6 +41,7 @@ public final class StatisticsHelper {
 	private static final String SKIPPED = "statistics$executions$skipped";
 	private static final String FAILED = "statistics$executions$failed";
 	private static final String UNTESTED = "statistics$executions$untested";
+	private static final String RUNNING = "statistics$executions$running";
 
 	private StatisticsHelper() {
 		//static only
@@ -72,7 +73,7 @@ public final class StatisticsHelper {
 				Arrays.stream(TestItemIssueGroup.values())
 						.filter(value -> !value.getIssueCounterField().equalsIgnoreCase(NOT_ISSUE_FLAG.getIssueCounterField()))
 						.map(value -> "statistics$defects$" + value.getValue().toLowerCase() + "$" + value.getLocator()),
-				Stream.of(TOTAL, PASSED, SKIPPED, FAILED, UNTESTED)
+				Stream.of(TOTAL, PASSED, SKIPPED, FAILED, UNTESTED, RUNNING)
 		);
 	}
 }

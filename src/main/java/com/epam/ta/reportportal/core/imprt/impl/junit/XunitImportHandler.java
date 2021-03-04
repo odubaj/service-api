@@ -149,6 +149,14 @@ public class XunitImportHandler extends DefaultHandler {
 				message = new StringBuilder();
 				status = StatusEnum.UNTESTED;
 				break;
+			case UNTESTED:
+				message = new StringBuilder();
+				status = StatusEnum.UNTESTED;
+				break;
+			case RUNNING:
+				message = new StringBuilder();
+				status = StatusEnum.RUNNING;
+				break;
 			case GLOBAL_PROPERTIES:
 				this.attributes.clear();
 				break;
@@ -207,6 +215,8 @@ public class XunitImportHandler extends DefaultHandler {
 				break;
 			case SYSTEM_OUT:
 			case MANUAL_TEST:
+			case RUNNING:
+			case UNTESTED:
 				attachLog(LogLevel.INFO);
 				break;
 			case WARNING:

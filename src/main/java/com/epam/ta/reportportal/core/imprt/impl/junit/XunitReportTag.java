@@ -69,6 +69,12 @@ public enum XunitReportTag {
 	// skipped element for skipped tests
 	SKIPPED("skipped"),
 
+	// untested element for untested tests
+	UNTESTED("untested"),
+
+	// running element for running tests
+	RUNNING("running"),
+
 	// manual element for manual tests
 	MANUAL_TEST("manual-test"),
 
